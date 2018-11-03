@@ -7,6 +7,8 @@ from weasyprint import HTML
 from markdown2 import markdown_path
 
 
+# UTILITIES
+
 def near_round(x, base):
     """ Returns n rounded to the nearest multiple of m """
     return int(base * round(float(x)/base))
@@ -19,15 +21,22 @@ def round_down(x, base):
     """ Returns n rounded down to the nearest multiple of m """
     return int(math.floor(x / base) * base)
 
-def make_pdf(filename, output=None):
+def save_to_file(pattern_text, filename):
+    """ Write the pattern to a new file. """
+    BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+    with open(BASE_DIR + '/created_patterns/'+ filename + '.md', 'w') as f:
+        f.write(pattern_text)
+
+def make_pdf(filename):
     """ Given a markdown file, convert to a PDF. """
     html = markdown_path('created_patterns/' + filename + '.md')
-    if not output:
-        output = '.'.join([filename.rsplit('.', 1)[0], 'pdf'])
+    output = 'created_patterns/' + '.'.join([filename.rsplit('.', 1)[0], 'pdf'])
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     css_file = os.path.join(BASE_DIR, 'resources/style.css')
     HTML(string=html).write_pdf(output, stylesheets=[css_file])
 
+
+# PATTERN OBJECTS
 
 class TopDownSock:
     def __init__(self, inputs, filename=None):
@@ -50,7 +59,7 @@ class TopDownSock:
         self.numbers = self.calc_pattern_values(self.inputs)
         self.pattern = self.make_pattern(self.numbers)
         if filename:
-            self.save_to_file(filename +'.md')
+            save_to_file(self.pattern, filename)
             make_pdf(filename)
 
     def __str__(self):
@@ -59,12 +68,6 @@ class TopDownSock:
         for number, value in vals.items():
             s += number + ": " + str(value) + "\n"
         return s
-
-    def save_to_file(self, filename):
-        """ Write the pattern to a new file """
-        BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-        with open(BASE_DIR + 'created_patterns'+ filename + '.md', 'w') as f:
-            f.write(self.pattern)
 
     def calc_pattern_values(self, inputs):
         """

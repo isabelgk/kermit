@@ -2,4 +2,4 @@ __pycache__/
 *.py[cod]
 
 pip-log.txt
-*DS_Store
+*DS_Store/
