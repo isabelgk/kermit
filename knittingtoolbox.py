@@ -106,8 +106,13 @@ class TopDownSock:
     def make_pattern(self, number_dict):
         with open('template_patterns/top_down_socks.txt', 'r') as f:
             pattern_template = f.read()
-        
         return Template(pattern_template).safe_substitute(number_dict)
+
+
+class Mitten:
+    """ A basic mitten pattern. """
+    def __init__(self, inputs, filename=None):
+        pass
 
 
 
