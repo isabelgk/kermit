@@ -1,0 +1,48 @@
+# Custom Basic Mitten Pattern
+
+## Cuff
+The cuff is knit in your choice of ribbing.
+
+Using a stretchy method , cast on $cuff_sts stitches. Join in the round.
+
+Work ribbing until cuff measures $cuff_length.
+
+*Increase for the hand stitches.*
+
+Knit, increasing $cuff_to_hand_st_increase stitches evenly to get $hand_sts stitches.
+
+## Thumb Gusset
+
+*Place markers for the thumb gusset on the next round.*
+
+Knit until one stitch remains, place marker, k1.
+
+$gusset_increase_instructions
+
+Now, separate the thumb. Knit to marker, remove marker, slip the stitches of the thumb
+gusset to scrap yarn, cast on one stitch over the gap (use the backward loop method and 
+place the newly made stitch on the last needle of the round). You should now have
+returned to $hand_sts stitches.
+
+## Hand
+
+Knit even until the hand (measured from top of the cuff) measures $hand_length. If you're
+making these for someone tall, add 0.5" more.
+
+You will now begin the spiral decreases.
+
+$decrease_instructions
+
+Cut yarn, leaving a 6" tail. Thread tail onto yarn needle and pull through final sts to secure.
+
+## Thumb
+
+**Setup round 1:** Return held thumb sts from scrap yarn to needles. With RS facing, rejoin yarn, and pick up and knit 3 sts in the gap over the cast-on st of the hand, knit to end of previously held thumb sts, knit the first picked-up st. This is the new start of round. Distribute sts across needles and join for working in the round.
+
+**Setup round 2:** K1, k2tog, knit to last 2 sts, ssk.
+
+Knit even until thumb is $thumb_length, approximately $thumb_rows rows.
+
+Close thumb by working k2tog around until 5 sts remain. Cut yarn, pull tail through remaining stitches, and weave in end.
+
+Block as desired.

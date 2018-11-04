@@ -21,6 +21,7 @@ def round_down(x, base):
     """ Returns n rounded down to the nearest multiple of m """
     return int(math.floor(x / base) * base)
 
+
 def save_to_file(pattern_text, filename):
     """ Write the pattern to a new file. """
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
@@ -69,8 +70,8 @@ class TopDownSock:
         >>> test = TopDownSock(example, filename="example")
         """
         self.inputs = inputs
-        self.numbers = self.calc_pattern_values(self.inputs)
-        self.pattern = self.make_pattern(self.numbers)
+        self.calc = self.calc_pattern_values(self.inputs)
+        self.pattern = self.make_pattern(self.calc)
         if filename:
             save_to_file(self.pattern, filename)
             make_pdf(filename)
@@ -89,92 +90,121 @@ class TopDownSock:
         Return a dictionary containing all of the values calculated plus the ones
         provided.
         """
-        numbers = inputs.copy()
+        calc = inputs.copy()
 
-        numbers['sock_sts'] = near_round(numbers['spi'] * numbers['foot_circ'] * .95, 4)
-        numbers['heel_sts'] = numbers['sock_sts'] // 2
-        numbers['heel_rows'] = round_up(numbers['foot_circ'] * numbers['row_gauge'] * 0.3, 2)
-        numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
+        calc['sock_sts'] = near_round(calc['spi'] * calc['foot_circ'] * .95, 4)
+        calc['heel_sts'] = calc['sock_sts'] // 2
+        calc['heel_rows'] = round_up(calc['foot_circ'] * calc['row_gauge'] * 0.3, 2)
+        calc['gusset_st_per_side'] = int((calc['heel_rows'] / 2) + 2)
 
-        if numbers['heel_sts'] % 3 == 2 or numbers['heel_sts'] % 3 == 1:
-            numbers['HT1'] = (numbers['heel_sts'] // 3) * 2 + 1
+        if calc['heel_sts'] % 3 == 2 or calc['heel_sts'] % 3 == 1:
+            calc['HT1'] = (calc['heel_sts'] // 3) * 2 + 1
         else:
-            numbers['HTI'] = numbers['heel_sts'] * 2 // 3
+            calc['HTI'] = calc['heel_sts'] * 2 // 3
 
-        if numbers['heel_sts'] % 3 == 2:
-            numbers['HT2'] = numbers['heel_sts'] // 3
-        elif numbers['heel_sts'] % 3 == 1:
-            numbers['HT2'] = int(math.floor(numbers['heel_sts'])/3 + 1)
+        if calc['heel_sts'] % 3 == 2:
+            calc['HT2'] = calc['heel_sts'] // 3
+        elif calc['heel_sts'] % 3 == 1:
+            calc['HT2'] = int(math.floor(calc['heel_sts'])/3 + 1)
         else:
-            numbers['HT2'] = int(numbers['heel_sts'] / 3)
+            calc['HT2'] = int(calc['heel_sts'] / 3)
 
-        numbers['sts_after_pickup'] = int(
-            (numbers['sock_sts'] / 2) + (numbers['HT2'] + 2) + (2 * numbers['gusset_st_per_side']))
-        numbers['TD1'] = round_up(((numbers['sock_sts'] - 8) / 8), 1)
-        numbers['TD2'] = round_down(((numbers['sock_sts'] - 8) / 8), 1)
-        numbers['first_toe_dec_count'] = numbers['sock_sts'] - 4 * numbers['TD1']
-        numbers['leg_rows'] = int(
-            numbers['leg_length']*numbers['row_gauge'] - 20 - numbers['heel_rows'])
-        return numbers
+        calc['sts_after_pickup'] = int(
+            (calc['sock_sts'] / 2) + (calc['HT2'] + 2) + (2 * calc['gusset_st_per_side']))
+        calc['TD1'] = round_up(((calc['sock_sts'] - 8) / 8), 1)
+        calc['TD2'] = round_down(((calc['sock_sts'] - 8) / 8), 1)
+        calc['first_toe_dec_count'] = calc['sock_sts'] - 4 * calc['TD1']
+        calc['leg_rows'] = int(
+            calc['leg_length']*calc['row_gauge'] - 20 - calc['heel_rows'])
+        return calc
 
 
     def make_pattern(self, replace_dict):
-        with open('template_patterns/top_down_socks.txt', 'r') as f:
+        with open('template_patterns/socks/top_down_socks.txt', 'r') as f:
             pattern_template = f.read()
         return Template(pattern_template).safe_substitute(replace_dict)
 
 
 class Mitten:
     """ A basic mitten pattern. """
-    def __init__(self, measurements=None, filename=None):
-        """
-        The mitten needs some variables to calculate the pattern.
-        - spi
-        - row_gauge
-        - cuff_sts
-        - cuff_length
-        - cuff_to_hand_st_increase
-        - hand_sts
-        - gusset_sts
-        - gusset_rnds
-        - closure_sts
-        - closure_length
-        - closure_init_dec
-        - sts_in_dec_group
-        - ease
-        """
-        if inputs == None and 
-            if hand_circumference != None:
-                inputs = self.estimate_measurements(hand_circumference)
-            else:
-                inputs = self.estimate_measurements()
-        self.inputs = inputs
-
-    def estimate_measurements(self, hand_circumference=7):
-        """
-        If you do not know anything except a hand circumference, 
-        you can estimate measurements from there.
-        """
-        estimate = dict()
-        hand_length = hand_circumference
-        estimate[cuff_sts] = near_round(0.8 * hand_circumference, 4)
-        estimate[cuff_length] = 
+    def __init__(self, inputs, filename=None):
+        self.calc = self.calc_pattern_values(inputs)
+        self.pattern = self.make_pattern(self.calc)
+        if filename:
+            save_to_file(self.pattern, filename)
+            make_pdf(filename)
 
 
-    def hand_to_upper_ribbing_decrease_instructions(self):
-        """ """
-        pass
+    def __str__(self):
+        vals = self.pattern_values
+        s = ""
+        for number, value in vals.items():
+            s += number + ": " + str(value) + "\n"
+        return s
 
 
-    def calc_pattern_values(self, inputs):
-        """ """
-        numbers = self.inputs.copy()
+    def make_decrease_rnd(self, start, end):
+        sts_to_decrease = start - end
+        num_times = sts_to_decrease
+        knit_group = start // sts_to_decrease - 2
+        s = "[k" + str(knit_group) + ", k2tog] " + str(num_times) + " times"
+        decrease_group_leftover = start % sts_to_decrease
+        if decrease_group_leftover != 0:
+            s += ", k" + str(decrease_group_leftover) + " to end of round"
+        return s
+
+
+    def decrease_instructions(self, sts_in_decrease_group, closure_initial_decrease):
+        s = ''
+        if closure_initial_decrease != 0:
+            s += '*Initial decrease round*: [k' + str(sts_in_decrease_group - 1) + ', k2tog]'\
+                    + str(closure_initial_decrease)  + ' times. Knit to end of the round.\n\n'
+        s += 'Divide the stitches into ' + str(sts_in_decrease_group) + ' groups.\n\n'
+        s += '*Decrease round*: [knit to 2 sts before end of group, k2tog] 5 times around. '
+        s += 'Repeat until 5 sts remain.\n\n'
+
+        return s
 
 
     def make_pattern(self, replace_dict):
-        """ """
-        pass
+        with open('template_patterns/mittens/basic_mitten.txt', 'r') as f:
+            pattern_template = f.read()
+        return Template(pattern_template).safe_substitute(replace_dict)
 
 
-# if __name__ == "__main__":
-    # pass
+
+    def calc_pattern_values(self, inputs):
+        calc = inputs.copy()
+
+        # values you can estimate from the hand circumference (palm circumference)
+        if 'wrist_circumference' not in calc:
+            calc['wrist_circumference'] = calc['palm_circumference'] * 0.8
+        if 'hand_length' not in calc:
+            calc['hand_length'] = calc['palm_circumference']
+        if 'thumb_gusset_length' not in calc:  # aka gusset rnds
+            calc['thumb_gusset_length'] = calc['hand_length'] * 0.36
+        if 'thumb_length' not in calc:
+            calc['thumb_length'] = calc['hand_length'] * 0.33
+        if 'ease' not in calc:
+            calc['ease'] = 1
+        if 'rnds_per_inch' not in calc:
+            calc['rnds_per_inch'] = calc['gauge'] * 0.75
+
+        # must calculate these
+        calc['cuff_sts'] = near_round(calc['wrist_circumference'] * calc['gauge'], 4)
+        calc['hand_sts'] = near_round(calc['palm_circumference'] * calc['ease'] * calc['gauge'], 2)
+        calc['cuff_to_hand_st_increase'] = calc['hand_sts'] - calc['cuff_sts']
+        calc['gusset_sts'] = near_round(calc['thumb_gusset_length'] * calc['rnds_per_inch'], 1)
+        calc['sts_for_closure'] = round_down(calc['hand_sts'], 5)
+        calc['closure_length'] = ((calc['sts_for_closure'] - 5) / 5) / calc['rnds_per_inch']
+        calc['closure_initial_decrease'] = calc['hand_sts'] - calc['sts_for_closure']
+        calc['decrease_instructions'] = self.decrease_instructions(calc['sts_for_closure']//5, \
+                                            calc['closure_initial_decrease'])
+        calc['thumb_rows'] = near_round(calc['thumb_length'] * calc['rnds_per_inch'] - 3, 1)
+
+        return calc
+
+
+if __name__ == "__main__":
+    test = {"palm_circumference": 8, "gauge": 8}
+    example = Mitten(test, 'test')
