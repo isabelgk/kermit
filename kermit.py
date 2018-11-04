@@ -54,6 +54,19 @@ class TopDownSock:
         - low_calf_circ (circumference of leg where the top of sock will be)
         - heel_diag (circumference around the heel)
         - leg_length (length of the sock leg)
+            
+        >>> example = {
+        ...    'spi': 8,
+        ...    'row_gauge': 6,
+        ...    'foot_circ': 9,
+        ...    'ankle_circ': 9,
+        ...    'gusset_circ': 9.78,
+        ...    'foot_length': 9.5,
+        ...    'low_calf_circ': 10.1,
+        ...    'heel_diag': 12.2,
+        ...    'leg_length': 12
+        ...    }
+        >>> test = TopDownSock(example, filename="example")
         """
         self.inputs = inputs
         self.numbers = self.calc_pattern_values(self.inputs)
@@ -62,12 +75,14 @@ class TopDownSock:
             save_to_file(self.pattern, filename)
             make_pdf(filename)
 
+
     def __str__(self):
         vals = self.calc_pattern_values(self.inputs)
         s = ""
         for number, value in vals.items():
             s += number + ": " + str(value) + "\n"
         return s
+
 
     def calc_pattern_values(self, inputs):
         """
@@ -100,32 +115,66 @@ class TopDownSock:
         numbers['first_toe_dec_count'] = numbers['sock_sts'] - 4 * numbers['TD1']
         numbers['leg_rows'] = int(
             numbers['leg_length']*numbers['row_gauge'] - 20 - numbers['heel_rows'])
-
         return numbers
 
-    def make_pattern(self, number_dict):
+
+    def make_pattern(self, replace_dict):
         with open('template_patterns/top_down_socks.txt', 'r') as f:
             pattern_template = f.read()
-        return Template(pattern_template).safe_substitute(number_dict)
+        return Template(pattern_template).safe_substitute(replace_dict)
 
 
 class Mitten:
     """ A basic mitten pattern. """
-    def __init__(self, inputs, filename=None):
+    def __init__(self, measurements=None, filename=None):
+        """
+        The mitten needs some variables to calculate the pattern.
+        - spi
+        - row_gauge
+        - cuff_sts
+        - cuff_length
+        - cuff_to_hand_st_increase
+        - hand_sts
+        - gusset_sts
+        - gusset_rnds
+        - closure_sts
+        - closure_length
+        - closure_init_dec
+        - sts_in_dec_group
+        - ease
+        """
+        if inputs == None and 
+            if hand_circumference != None:
+                inputs = self.estimate_measurements(hand_circumference)
+            else:
+                inputs = self.estimate_measurements()
+        self.inputs = inputs
+
+    def estimate_measurements(self, hand_circumference=7):
+        """
+        If you do not know anything except a hand circumference, 
+        you can estimate measurements from there.
+        """
+        estimate = dict()
+        hand_length = hand_circumference
+        estimate[cuff_sts] = near_round(0.8 * hand_circumference, 4)
+        estimate[cuff_length] = 
+
+
+    def hand_to_upper_ribbing_decrease_instructions(self):
+        """ """
         pass
 
 
+    def calc_pattern_values(self, inputs):
+        """ """
+        numbers = self.inputs.copy()
 
-if __name__ == "__main__":
-    foo = {
-        'spi': 8,
-        'row_gauge': 6,
-        'foot_circ': 9,
-        'ankle_circ': 9,
-        'gusset_circ': 9.78,
-        'foot_length': 9.5,
-        'low_calf_circ': 10.1,
-        'heel_diag': 12.2,
-        'leg_length': 12
-    }
-    test = TopDownSock(foo, filename="test")
+
+    def make_pattern(self, replace_dict):
+        """ """
+        pass
+
+
+# if __name__ == "__main__":
+    # pass
