@@ -1,5 +1,7 @@
 # Kermit 
 
+![Kermit](/resources/kermit-logo.png)
+
 Kermit creates custom knitting patterns that fit your knitting style and the dimensions 
 you want. This project started because I was tired of knitting socks that didn't fit my feet.
 I read *Custom Socks* by Kate Atherley and was frustrated by the calculations I had to
