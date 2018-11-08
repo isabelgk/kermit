@@ -1,19 +1,19 @@
 from flask import render_template, flash, redirect, url_for
 from kermit import app
-from kermit.forms import NewProject, PickProject, SockMeasurements, MittenMeasurements
+from kermit.forms import KermitProject, PickProject, SockMeasurements, MittenMeasurements
 
 
 @app.route('/')
 @app.route('/index')
 def index():
-    form = NewProject()
+    form = KermitProject()
     return render_template('index.html', title="Home", form=form)
 
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def start_new_project():
-    form = NewProject()
+    form = KermitProject()
     if form.validate_on_submit():
         flash('New project started: {}'.format(form.username.data))
         return redirect(url_for('select_type'))

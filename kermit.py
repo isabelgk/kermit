@@ -1,8 +1,7 @@
 import math
 import os
-import argparse
 
-from kermit import app
+
 from string import Template
 from weasyprint import HTML
 from markdown2 import markdown_path

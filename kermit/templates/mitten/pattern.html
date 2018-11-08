@@ -1,1 +1,36 @@
 {% extends "base.html" %}
+
+{% block content %}
+
+<h1 id="custom-basic-mitten-pattern">Custom Basic Mitten Pattern</h1>
+<h2 id="cuff">Cuff</h2>
+    <p>The cuff is knit in your choice of ribbing.</p>
+    <p>Using a stretchy method, cast on $cuff_sts stitches. Join in the round.</p>
+    <p>Work ribbing until cuff measures $cuff_length.</p>
+    <p><em>Increase for the hand stitches.</em></p>
+    <p>Knit, increasing $cuff_to_hand_st_increase stitches evenly to get $hand_sts stitches.</p>
+<h2 id="thumb-gusset">Thumb Gusset</h2>
+    <p><em>Place markers for the thumb gusset on the next round.</em></p>
+    <p>Knit until one stitch remains, place marker, k1.</p>
+    <p>$gusset_increase_instructions</p>
+    <p>
+        Now, separate the thumb. Knit to marker, remove marker, slip the stitches of the thumb
+        gusset to scrap yarn, cast on one stitch over the gap (use the backward loop method and place the newly
+        made stitch on the last needle of the round). You should now have returned to $hand_sts stitches.
+    </p>
+<h2 id="hand">Hand</h2>
+    <p>
+        Knit even until the hand (measured from top of the cuff) measures $hand_length.
+        If you're making these for someone tall, add 0.5&quot; more.
+    </p>
+    <p>You will now begin the spiral decreases.</p>
+    <p>$decrease_instructions</p>
+    <p>Cut yarn, leaving a 6&quot; tail. Thread tail onto yarn needle and pull through final sts to secure.</p>
+<h2 id="thumb">Thumb</h2>
+<p><strong>Setup round 1:</strong> Return held thumb sts from scrap yarn to needles. With RS facing, rejoin yarn, and pick up and knit 3 sts in the gap over the cast-on st of the hand, knit to end of previously held thumb sts, knit the first picked-up st. This is the new start of round. Distribute sts across needles and join for working in the round.</p>
+<p><strong>Setup round 2:</strong> K1, k2tog, knit to last 2 sts, ssk.</p>
+<p>Knit even until thumb is $thumb_length, approximately $thumb_rows rows.</p>
+<p>Close thumb by working k2tog around until 5 sts remain. Cut yarn, pull tail through remaining stitches, and weave in end.</p>
+<p>Block as desired.</p>
+
+{% endblock %}

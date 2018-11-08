@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
-<h1 id="custom-top-down-socks">Custom Top-Down Socks</h1>
+<h1>Custom Top-Down Socks</h1>
+<p>
+    {{ form.username.data }}<br>
+    {{ form.spi.label}}: {{ form.spi.data }}<br>
+    {{ form.row_gauge.label}}: {{ form.row_gauge.data }}
+</p>
 <h2 id="cuff">Cuff</h2>
 <p>Using a flexible method, like long-tail or twisted German, cast on $sock_sts stitches. Join in the round. Work in k1, p1 ribbing for about 2&quot;.</p>
 <h2 id="leg">Leg</h2>
