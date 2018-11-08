@@ -72,10 +72,6 @@ class TopDownSock:
         """
         self.inputs = inputs
         self.calc = self.calc_pattern_values(self.inputs)
-        self.pattern = self.make_pattern(self.calc)
-        if filename:
-            save_to_file(self.pattern, filename)
-            make_pdf(filename)
 
 
     def __str__(self):

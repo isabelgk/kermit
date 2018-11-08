@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, BooleanField, SubmitField
+from wtforms import StringField, SelectField, SubmitField
 from wtforms.validators import DataRequired
 
 
@@ -9,5 +9,14 @@ class NewProject(FlaskForm):
 
 
 class PickProject(FlaskForm):
-    pattern_type = BooleanField('Top-Down Sock')
+    project_type_dropdown_list = [('Sock', 'Sock'), ('Mitten', 'Mitten')]
+    project_type = SelectField('Project types', choices=project_type_dropdown_list)
+    submit = SubmitField('Next')
+
+
+class SockMeasurements(FlaskForm):
+    submit = SubmitField('Next')
+
+
+class MittenMeasurements(FlaskForm):
     submit = SubmitField('Next')
