@@ -1,15 +1,43 @@
 # Kermit 
 
-*Currently under development*
-
 ## What is Kermit?
-Kermit is a web-based application that let's you pick a knitting project and size it to your
-exact specifications. You provide the yarn, needles, and resulting gauge, and Kermit does the rest. 
+
+Traditional knitting patterns ask you to select yarn and needles to achieve
+[gauge](https://blog.tincanknits.com/2013/08/17/gauge/) so your final product will be the right size.
+That often means trying over and over to force your knitting style to match a pattern.
+
+![Credit: How to Do a Gauge Swatch, The Loopy Ewe]('kermit/resources/swatches-loopy-ewe.jpg')
+
+With Kermit, I wanted to be able to make basic patterns for any project. Instead of winging a project, 
+making multiple gauge swatches, or doing tedious calculations, I wanted there to be a better way.
+
+
+## Project Types (under development)
+-[ ] Socks
+    - [ ] Top-down
+    - [ ] Toe-up
+-[ ] Mittens
+    -[ ] Basic mittens
+    -[ ] Fingerless mitts
+    -[ ] Convertible mitts
+-[ ] Gloves
+    -[ ] Basic gloves
+    -[ ] Fingerless gloves
+    -[ ] Convertible gloves
+-[ ] Hats
+    -[ ] Simple
+    -[ ] Beret
+    -[ ] Ear flaps
+    -[ ] Stocking cap
+-[ ] Cowls
+-[ ] Sweaters
+    - [ ] Drop-shoulder
+    - [ ] Raglan
+    - [ ] Set-in sleeve
+    - [ ] Yoke
+    - [ ] Cardigan
 
 ## Screenshots
-[coming soon]
-
-## How it works
 [coming soon]
 
 ## Credits
