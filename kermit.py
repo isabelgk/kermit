@@ -2,6 +2,7 @@ import math
 import os
 import argparse
 
+from kermit import app
 from string import Template
 from weasyprint import HTML
 from markdown2 import markdown_path
@@ -120,7 +121,7 @@ class TopDownSock:
 
 
     def make_pattern(self, replace_dict):
-        with open('template_patterns/socks/top_down_socks.txt', 'r') as f:
+        with open('raw/socks/top_down_socks.txt', 'r') as f:
             pattern_template = f.read()
         return Template(pattern_template).safe_substitute(replace_dict)
 
@@ -167,7 +168,7 @@ class Mitten:
 
 
     def make_pattern(self, replace_dict):
-        with open('template_patterns/mittens/basic_mitten.txt', 'r') as f:
+        with open('raw/mittens/basic_mitten.txt', 'r') as f:
             pattern_template = f.read()
         return Template(pattern_template).safe_substitute(replace_dict)
 
