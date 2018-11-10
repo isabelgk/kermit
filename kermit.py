@@ -40,7 +40,7 @@ def make_pdf(filename):
 # PATTERN OBJECTS
 
 class TopDownSock:
-    def __init__(self, inputs, filename=None):
+    def __init__(self, inputs):
         """
         A sock needs certain variables to be specified to generate
         a pattern. This initializes a dictionary of the necessary quantities
@@ -55,19 +55,7 @@ class TopDownSock:
         - low_calf_circ (circumference of leg where the top of sock will be)
         - heel_diag (circumference around the heel)
         - leg_length (length of the sock leg)
-            
-        >>> example = {
-        ...    'spi': 8,
-        ...    'row_gauge': 6,
-        ...    'foot_circ': 9,
-        ...    'ankle_circ': 9,
-        ...    'gusset_circ': 9.78,
-        ...    'foot_length': 9.5,
-        ...    'low_calf_circ': 10.1,
-        ...    'heel_diag': 12.2,
-        ...    'leg_length': 12
-        ...    }
-        >>> test = TopDownSock(example, filename="example")
+
         """
         self.inputs = inputs
         self.calc = self.calc_pattern_values(self.inputs)
