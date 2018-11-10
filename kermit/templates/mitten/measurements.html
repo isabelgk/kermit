@@ -1,1 +1,21 @@
 {% extends "base.html" %}
+
+{% block content %}
+<h1>Design a mitten</h1>
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.spi.label }}<br>
+        {{ form.spi(size=32) }}
+    </p>
+    <p>
+        {{ form.row_gauge.label }}<br>
+        {{ form.row_gauge(size=32) }}
+    </p>
+    <p>
+        {{ form.palm_circumference.label }}<br>
+        {{ form.palm_circumference(size=32) }}
+    </p>
+    <p>{{ form.submit() }}</p>
+</form>
+{% endblock %}

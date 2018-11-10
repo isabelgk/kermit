@@ -1,7 +1,7 @@
 from flask import render_template, flash, redirect, url_for
 from kermit import app
 from kermit.forms import KermitProject, PickProject, SockMeasurements, MittenMeasurements
-from kermit.worker import sock_calculate
+from kermit.builder import sock_calculate, mitten_calculate
 
 
 @app.route('/')
@@ -45,5 +45,6 @@ def input_sock_measurements():
 def input_mitten_measurements():
     form = MittenMeasurements()
     if form.validate_on_submit():
-        return render_template('mitten/pattern.html', title="Mitten pattern", form=form)
+        calcs = mitten_calculate(form.data)
+        return render_template('mitten/pattern.html', title="Mitten pattern", c=calcs)
     return render_template('mitten/measurements.html', title="Mitten measurements", form=form)

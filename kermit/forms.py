@@ -28,4 +28,7 @@ class SockMeasurements(KermitProject):
 
 
 class MittenMeasurements(FlaskForm):
+    spi = DecimalField('Stitches per inch', validators=[DataRequired()])
+    row_gauge = DecimalField('Rounds per inch (row gauge)')
+    palm_circumference = DecimalField('Palm (hand) circumference (in.)')
     submit = SubmitField('Next')
