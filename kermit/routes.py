@@ -1,6 +1,6 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, redirect, url_for
 from kermit import app
-from kermit.forms import KermitProject, PickProject, SockMeasurements, MittenMeasurements
+from kermit.forms import *
 from kermit.builder import sock_calculate, mitten_calculate
 
 
@@ -16,7 +16,6 @@ def index():
 def start_new_project():
     form = KermitProject()
     if form.validate_on_submit():
-        flash('New project started: {}'.format(form.username.data))
         return redirect(url_for('select_type'))
     return render_template('index.html', title="Home", form=form)
 
@@ -33,12 +32,17 @@ def select_type():
 
 @app.route('/sock/measurements', methods=['GET', 'POST'])
 def input_sock_measurements():
-    form = SockMeasurements()
-    if form.validate_on_submit():
-        calcs = sock_calculate(form.data)
+    parameters = BasicParameters()
+    measurements = SockMeasurements()
+    design = SockDesignChoices()
+    metadata = Metadata()
+    if measurements.validate_on_submit():
+        calcs = sock_calculate(parameters.data, measurements.data)
         print(calcs)
-        return render_template('sock/pattern.html', title="Sock pattern", c=calcs)
-    return render_template('sock/measurements.html', title="Sock measurements", form=form)
+        return render_template('sock/pattern.html', title="Sock pattern", calcs=calcs)
+    return render_template('sock/measurements.html', title="Sock measurements",
+                           parameters=parameters, measurements=measurements, design=design,
+                           metadata=metadata)
 
 
 @app.route('/mitten/measurements', methods=['GET', 'POST'])

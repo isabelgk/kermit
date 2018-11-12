@@ -39,14 +39,14 @@ def decrease_instructions(sts_in_decrease_group, closure_initial_decrease):
 # CALCULATIONS
 
 
-def sock_calculate(inputs):
+def sock_calculate(parameters, inputs):
     """ Given all of the form inputs, make the calculations needed. """
 
     calc = inputs.copy()
 
-    calc['sock_sts'] = near_round(inputs['spi'] * inputs['foot_circ'] * Decimal(.95), 4)
+    calc['sock_sts'] = near_round(parameters['spi'] * inputs['foot_circ'] * Decimal(.95), 4)
     calc['heel_sts'] = calc['sock_sts'] // 2
-    calc['heel_rows'] = round_up(calc['foot_circ'] * calc['row_gauge'] * Decimal(0.3), 2)
+    calc['heel_rows'] = round_up(calc['foot_circ'] * parameters['row_gauge'] * Decimal(0.3), 2)
     calc['gusset_st_per_side'] = int((calc['heel_rows'] / 2) + 2)
 
     if calc['heel_sts'] % 3 == 2 or calc['heel_sts'] % 3 == 1:
@@ -66,7 +66,7 @@ def sock_calculate(inputs):
     calc['TD2'] = round_down(((calc['sock_sts'] - 8) / 8), 1)
     calc['first_toe_dec_count'] = calc['sock_sts'] - 4 * calc['TD1']
     calc['leg_rows'] = int(
-        calc['leg_length'] * calc['row_gauge'] - 20 - calc['heel_rows'])
+        calc['leg_length'] * parameters['row_gauge'] - 20 - calc['heel_rows'])
 
     keys_list = ['spi', 'row_gauge', 'foot_circ', 'ankle_circ', 'gusset_circ',
                  'foot_length', 'low_calf_circ', 'heel_diag', 'leg_length', 'sock_sts',
@@ -109,7 +109,7 @@ def mitten_calculate(inputs):
                                         calc['closure_initial_decrease'])
     calc['thumb_rows'] = near_round(calc['thumb_length'] * calc['rnds_per_inch'] - 3, 1)
 
-    keys_list = ['spi', 'row_gauge', 'cuff_sts', 'cuff_length',
+    keys_list = ['spi', 'row_gauge', 'cuff_sts', 'cuff_length', 'hand_length',
                  'cuff_to_hand_st_increase', 'hand_sts', 'gusset_sts',
                  'decrease_instructions', 'thumb_length', 'thumb_rows']
     result = make_str_dict(keys_list, calc)
