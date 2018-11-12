@@ -17,25 +17,25 @@ class PickProject(FlaskForm):
 
 class BasicParameters(FlaskForm):
     spi = DecimalField('Stitches per inch', default=Decimal(8.0), validators=[DataRequired()])
-    row_gauge = DecimalField('Rounds per inch (row gauge)', validators=[Optional()])
+    row_gauge = DecimalField('Rounds per inch (row gauge)', default=Decimal(11), validators=[Optional()])
     submit = SubmitField('Next')
 
 
 class Metadata(FlaskForm):
-    name = StringField('Name')
-    yarn = StringField('Yarn')
-    needles = StringField('Needles')
-    submit = SubmitField('Next')
+    name = StringField('Name', validators=[Optional()])
+    yarn = StringField('Yarn', validators=[Optional()])
+    needles = StringField('Needles', validators=[Optional()])
+    submit = SubmitField('Next', validators=[Optional()])
 
 
 class SockMeasurements(FlaskForm):
-    foot_circ = DecimalField('Foot circumference (in.)')
-    ankle_circ = DecimalField('Ankle circumference (in.)')
-    gusset_circ = DecimalField('Gusset circumference (in.)')
-    foot_length = DecimalField('Foot length (in.)')
-    low_calf_circ = DecimalField('Lower calf circumference (in.)')
-    heel_diag = DecimalField('Heel diagonal circumference (in.)')
-    leg_length = DecimalField('Sock leg length (in.)')
+    foot_circ = DecimalField('Foot circumference (in.)', default=Decimal(9.25), validators=[Optional()])
+    ankle_circ = DecimalField('Ankle circumference (in.)', validators=[Optional()])
+    gusset_circ = DecimalField('Gusset circumference (in.)', validators=[Optional()])
+    foot_length = DecimalField('Foot length (in.)', validators=[Optional()])
+    low_calf_circ = DecimalField('Lower calf circumference (in.)', validators=[Optional()])
+    heel_diag = DecimalField('Heel diagonal circumference (in.)', validators=[Optional()])
+    leg_length = DecimalField('Sock leg length (in.)', validators=[Optional()])
     submit = SubmitField('Next')
 
 

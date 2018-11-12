@@ -3,15 +3,14 @@
 {% block content %}
 <h1>Build a sock pattern</h1>
 
-
 <form action="" method="post" novalidate>
+    {{ metadata.hidden_tag() }}
 
     <h2>Metadata</h2>
         <p>
             {{ metadata.name.label }}<br>
             {{ metadata.name(size=32) }}
         </p>
-        <p>{{ metadata.submit() }}</p>
 
     <h2>Design Choices</h2>
         <p>
@@ -34,7 +33,6 @@
             {{ design.toe_shaping.label }} <br>
             {{ design.toe_shaping() }}
         </p>
-        <p>{{ design.submit() }}</p>
 
     <h2>Gauge</h2>
         <p>
@@ -45,7 +43,6 @@
             {{ parameters.row_gauge.label }}<br>
             {{ parameters.row_gauge(size=2) }}
         </p>
-        <p>{{ parameters.submit() }}</p>
 
     <h2>Measurements</h2>
         <!--<img src="{{ url_for('static', filename='foot-diagram.png') }}">-->

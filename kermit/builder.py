@@ -43,10 +43,15 @@ def sock_calculate(parameters, inputs):
     """ Given all of the form inputs, make the calculations needed. """
 
     calc = inputs.copy()
+    calc['spi'] = parameters['spi']
+    if not parameters['row_gauge']:
+        calc['row_gauge'] = Decimal(calc['spi']) * Decimal(4/3)
+    else:
+        calc['row_gauge'] = parameters['row_gauge']
 
     calc['sock_sts'] = near_round(parameters['spi'] * inputs['foot_circ'] * Decimal(.95), 4)
     calc['heel_sts'] = calc['sock_sts'] // 2
-    calc['heel_rows'] = round_up(calc['foot_circ'] * parameters['row_gauge'] * Decimal(0.3), 2)
+    calc['heel_rows'] = round_up(Decimal(calc['foot_circ']) * parameters['row_gauge'] * Decimal(0.3), 2)
     calc['gusset_st_per_side'] = int((calc['heel_rows'] / 2) + 2)
 
     if calc['heel_sts'] % 3 == 2 or calc['heel_sts'] % 3 == 1:
