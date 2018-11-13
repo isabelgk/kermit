@@ -17,7 +17,7 @@ def round_down(x, base):
     return int(math.floor(x / base) * base)
 
 
-def smart_stringify_dictionary(d):
+def stringify_dict(d):
     """
     Used to send calculated values to Jinja2 templates.
 

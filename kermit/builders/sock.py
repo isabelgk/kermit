@@ -1,18 +1,95 @@
-from kermit.utilities import *
+from decimal import Decimal
+from kermit.utilities import round_down, round_up, near_round, stringify_dict
 
 
 class Sock:
-    """ A sock pattern object """
+    """ A builders pattern object """
 
-    def __init__(self, gauge, measurements):
+    def __init__(self, metadata, gauge, measurements, design):
         """ Constructor for the Sock """
+        self.metadata = metadata
         self.gauge = self.fill_in_needed_values(gauge, gauge=True)
         self.measurements = self.fill_in_needed_values(measurements, measurements=True)
-        self.numbers = smart_stringify_dictionary(self.calculate_values(self.gauge, self.measurements))
-        self.flags = self.unusual_ratios(self.measurements)
+        self.all_data = self.calculate_values(self.gauge, self.measurements)
+        self.design = design
+        print(design)
 
-    def get_measurements(self):
-        return self.numbers
+        self.pattern = self.get_pattern_text_dict()
+        print(self.pattern)
+
+    def __str__(self):
+        """ The sock's string is its pattern. """
+        text = ""
+        for key, value in self.pattern.items():
+            text += "{}\n".format(key)
+            for item in value:
+                text += "{}\n".format(item)
+        return text
+
+    def get_calculated_sock_numbers(self):
+        return stringify_dict(self.calculate_values(self.gauge, self.measurements))
+
+    def get_intro_text(self):
+        """
+        Let the user know about the name of the pattern and the gauge.
+
+        Note: For Jinja2, we will separate new lines by creating each line of text as an
+        element in an array and will display as follows:
+            {% for para in text %}
+            <p>{{para}}</p>
+            {% endfor %}
+
+        This is because Jinja2 does not interpret \n or <br> correctly.
+        https://stackoverflow.com/questions/12244057/any-way-to-add-a-new-line-from-a-string-with-the-n-character-in-flask
+        """
+        text = []
+        if self.metadata['name'] is not None:
+            text.append("{}".format(self.metadata['name']))
+        text.append("stitches per inch: {}".format(self.gauge['spi']))
+        text.append("rounds per inch: {}".format(self.gauge['row_gauge']))
+
+        return text
+
+    def get_cuff_text(self):
+        """ Set up the ribbing of the cuff """
+
+        if self.design['cuff_ribbing'] == 'one_by_one':
+            rib = "1x1 ribbing"
+        elif self.design['cuff_ribbing'] == 'two_by_two':
+            rib = "2x2 ribbing"
+        else:
+            rib = "ribbing"
+
+        text = [
+            "Cast on {} stitches and join in the round.".format(self.all_data['sock_sts']),
+            "Work in {} for 2 inches.".format(rib)
+        ]
+
+        return text
+
+    def get_leg_text(self):
+        pass
+
+    def get_heel_flap_text(self):
+        pass
+
+    def get_gusset_text(self):
+        pass
+
+    def get_foot_text(self):
+        pass
+
+    def get_toe_text(self):
+        pass
+
+    def get_pattern_text_dict(self):
+        return {'intro': self.get_intro_text(),
+                'cuff': self.get_cuff_text(),
+                'leg': self.get_leg_text(),
+                'heel_flap': self.get_heel_flap_text(),
+                'gusset': self.get_gusset_text(),
+                'foot': self.get_foot_text(),
+                'toe': self.get_toe_text()}
 
     @staticmethod
     def fill_in_needed_values(d, gauge=False, measurements=False):
@@ -33,7 +110,7 @@ class Sock:
                 - Must contain one of [foot circumference, ankle circumference, gusset
                 circumference, foot length]
                 - Can contain lower calf circumference, heel diagonal circumference, and
-                sock leg length
+                builders leg length
 
         Returns:
             - Dictionary with all strings for keys and numbers as values.
@@ -41,7 +118,6 @@ class Sock:
         assert not (gauge and measurements), "You can only fill in one dictionary at a time"
 
         if gauge:
-            # Go through gauge first: row gauge to stitches per inch is roughly 4 to 3
             if 'row_gauge' not in d:
                 d['row_gauge'] = Decimal(4/3 * d['spi'])
 
@@ -79,12 +155,13 @@ class Sock:
                     d['gusset_circ'] = d['ankle_circ'] * Decimal(1.10)
 
             if d['leg_length'] is None:
-                d['leg_length'] = Decimal(8)
+                d['leg_length'] = Decimal(8.00)
 
         return d
 
     @staticmethod
     def unusual_ratios(measurements):
+        # TODO: Unusual ratio determination
         """
         From the measurements, there may be some unusual ratios that will require
         extra changes to the pattern.
@@ -102,12 +179,12 @@ class Sock:
     @staticmethod
     def calculate_values(gauge, measurements):
         """
-        Given your gauge and foot measurements, get all of the needed numbers for the sock pattern.
+        Given your gauge and foot measurements, get all of the needed numbers for the builders pattern.
 
         Args:
             - gauge (dict): Stitches per inch and rounds per inch
             - measurements (dict): foot circumference, ankle circumference, gusset circumference, foot length,
-            lower calf circumference, heel diagonal circumference, sock leg length
+            lower calf circumference, heel diagonal circumference, builders leg length
         """
         numbers = dict()
         numbers['sock_sts'] = near_round(gauge['spi'] * measurements['foot_circ'] * Decimal(.95), 4)
@@ -135,47 +212,3 @@ class Sock:
             measurements['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
 
         return numbers
-
-
-def mitten_calculate(inputs):
-    calc = inputs.copy()
-
-    # values you can estimate from the hand circumference (palm circumference)
-    if 'wrist_circumference' not in calc:
-        calc['wrist_circumference'] = calc['palm_circumference'] * Decimal(0.8)
-    if 'hand_length' not in calc:
-        calc['hand_length'] = calc['palm_circumference']
-    if 'thumb_gusset_length' not in calc:  # aka gusset rounds
-        calc['thumb_gusset_length'] = calc['hand_length'] * Decimal(0.36)
-    if 'thumb_length' not in calc:
-        calc['thumb_length'] = round(calc['hand_length'] * Decimal(0.33), 2)
-    if 'rnds_per_inch' not in calc:
-        calc['rnds_per_inch'] = calc['spi'] * Decimal(0.75)
-    if 'ease' not in calc:
-        calc['ease'] = Decimal(1.0)
-    if 'cuff_length' not in calc:
-        calc['cuff_length'] = Decimal(2.0)
-
-    # TODO: gusset increase instructions
-    # must calculate these
-    calc['cuff_sts'] = near_round(calc['wrist_circumference'] * calc['spi'], 4)
-    calc['hand_sts'] = near_round(calc['palm_circumference'] * calc['ease'] * calc['spi'], 2)
-    calc['cuff_to_hand_st_increase'] = calc['hand_sts'] - calc['cuff_sts']
-    calc['gusset_sts'] = near_round(calc['thumb_gusset_length'] * calc['rnds_per_inch'], 1)
-    calc['sts_for_closure'] = round_down(calc['hand_sts'], 5)
-    calc['closure_length'] = (Decimal((calc['sts_for_closure'] - 5)) / 5) / calc['rnds_per_inch']
-    calc['closure_initial_decrease'] = calc['hand_sts'] - calc['sts_for_closure']
-    calc['decrease_instructions'] = decrease_instructions(calc['sts_for_closure']//5, \
-                                        calc['closure_initial_decrease'])
-    calc['thumb_rows'] = near_round(calc['thumb_length'] * calc['rnds_per_inch'] - 3, 1)
-
-    keys_list = ['spi', 'row_gauge', 'cuff_sts', 'cuff_length', 'hand_length',
-                 'cuff_to_hand_st_increase', 'hand_sts', 'gusset_sts',
-                 'decrease_instructions', 'thumb_length', 'thumb_rows']
-    result = make_str_dict(keys_list, calc)
-    return result
-
-
-if __name__ == "__main__":
-    import doctest
-    doctest.testmod()

@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for
 from kermit import app
 from kermit.forms import *
-from kermit.builder import Sock, mitten_calculate
+from kermit.builders.sock import Sock
 
 
 @app.route('/')
@@ -30,17 +30,17 @@ def select_type():
     return render_template('pattern-type.html', title="Pattern Selection", form=form)
 
 
-@app.route('/sock/measurements', methods=['GET', 'POST'])
+@app.route('/builders/measurements', methods=['GET', 'POST'])
 def input_sock_measurements():
     gauge = BasicParameters()
     measurements = SockMeasurements()
     design = SockDesignChoices()
     metadata = Metadata()
     if measurements.validate_on_submit():
-        sock = Sock(gauge.data, measurements.data)
-        return render_template('sock/pattern.html', title="Sock pattern", fillin=sock.get_measurements())
+        sock = Sock(metadata.data, gauge.data, measurements.data, design.data)
+        return render_template('sock/pattern.html', title="Sock pattern", fillin=sock.get_calculated_sock_numbers())
     return render_template('sock/measurements.html', title="Sock measurements",
-                           parameters=parameters, measurements=measurements, design=design,
+                           gauge=gauge, measurements=measurements, design=design,
                            metadata=metadata
                            )
 

@@ -1,4 +1,4 @@
-""" Deprecated """
+# TODO: Remove deprecated script
 
 import math
 import os
@@ -44,7 +44,7 @@ def make_pdf(filename):
 class TopDownSock:
     def __init__(self, inputs):
         """
-        A sock needs certain variables to be specified to generate
+        A builders needs certain variables to be specified to generate
         a pattern. This initializes a dictionary of the necessary quantities
         and their values. All values are assumed to be in inches.
 
@@ -54,9 +54,9 @@ class TopDownSock:
         - ankle_circ (circumference of the leg around the ankle)
         - gusset_circ (circumference of the largest section of the foot)
         - foot_length (length of the foot from toe to heel)
-        - low_calf_circ (circumference of leg where the top of sock will be)
+        - low_calf_circ (circumference of leg where the top of builders will be)
         - heel_diag (circumference around the heel)
-        - leg_length (length of the sock leg)
+        - leg_length (length of the builders leg)
 
         """
         self.inputs = inputs
