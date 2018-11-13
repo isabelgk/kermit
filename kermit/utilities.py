@@ -34,13 +34,13 @@ def smart_stringify_dictionary(d):
         - stringified dictionary
     """
     stringified = dict()
-    for key in d:
-        if isinstance(key, int):
-            stringified[key] = str(d[key])
-        elif isinstance(key, Decimal):
-            stringified[key] = str(key.quantize('.01'))
-        elif isinstance(key, float):
-            stringified[key] = str(round(key, 2))
+    for key, value in d.items():
+        if isinstance(value, int):
+            stringified[key] = str(value)
+        elif isinstance(value, Decimal):
+            stringified[key] = str(value.quantize('.01'))
+        elif isinstance(value, float):
+            stringified[key] = str(round(value, 2))
 
     return stringified
 

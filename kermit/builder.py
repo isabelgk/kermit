@@ -8,7 +8,11 @@ class Sock:
         """ Constructor for the Sock """
         self.gauge = self.fill_in_needed_values(gauge, gauge=True)
         self.measurements = self.fill_in_needed_values(measurements, measurements=True)
+        self.numbers = smart_stringify_dictionary(self.calculate_values(self.gauge, self.measurements))
         self.flags = self.unusual_ratios(self.measurements)
+
+    def get_measurements(self):
+        return self.numbers
 
     @staticmethod
     def fill_in_needed_values(d, gauge=False, measurements=False):
@@ -38,41 +42,44 @@ class Sock:
 
         if gauge:
             # Go through gauge first: row gauge to stitches per inch is roughly 4 to 3
-            if 'row_gauge' not in gauge:
+            if 'row_gauge' not in d:
                 d['row_gauge'] = Decimal(4/3 * d['spi'])
 
         if measurements:
-            if 'foot_length' in d:
-                if 'foot_circ' not in measurements:
+            if d['foot_length'] is not None:
+                if d['foot_circ'] is None:
                     d['foot_circ'] = d['foot_length'] * Decimal(1.05)
-                if 'ankle_circ' not in d:
+                if d['ankle_circ'] is None:
                     d['ankle_circ'] = d['foot_length'] * Decimal(1.05)
-                if 'gusset_circ' not in d:
+                if d['gusset_circ'] is None:
                     d['gusset_circ'] = d['foot_length'] * Decimal(1.15)
 
-            if 'foot_circ' in d:
-                if 'foot_length' not in d:
+            if d['foot_circ'] is not None:
+                if d['foot_length'] is None:
                     d['foot_length'] = d['foot_circ'] * Decimal(0.95)
-                if 'gusset_circ' not in d:
+                if d['gusset_circ'] is None:
                     d['gusset_circ'] = d['foot_circ'] * Decimal(1.10)
-                if 'ankle_circ' not in d:
+                if d['ankle_circ'] is None:
                     d['ankle_circ'] = d['foot_circ']
 
-            if 'gusset_circ' in d:
-                if 'foot_length' not in d:
+            if d['gusset_circ'] is not None:
+                if d['foot_length'] is None:
                     d['foot_length'] = d['gusset_circ'] * Decimal(0.95)
-                if 'foot_circ' not in d:
+                if d['foot_circ'] is None:
                     d['foot_circ'] = d['gusset_circ'] / Decimal(1.10)
-                if 'ankle_circ' not in d:
+                if d['ankle_circ'] is None:
                     d['ankle_circ'] = d['gusset_circ'] * Decimal(1.05)
 
-            if 'ankle_circ' in measurements:
-                if 'foot_length' not in d:
+            if d['ankle_circ'] is not None:
+                if d['foot_length'] is None:
                     d['foot_length'] = d['ankle_circ'] * Decimal(0.95)
-                if 'foot_circ' not in d:
+                if d['foot_circ'] is None:
                     d['foot_circ'] = d['ankle_circ']
-                if 'gusset_circ' not in d:
+                if d['gusset_circ'] is None:
                     d['gusset_circ'] = d['ankle_circ'] * Decimal(1.10)
+
+            if d['leg_length'] is None:
+                d['leg_length'] = Decimal(8)
 
         return d
 
@@ -105,7 +112,7 @@ class Sock:
         numbers = dict()
         numbers['sock_sts'] = near_round(gauge['spi'] * measurements['foot_circ'] * Decimal(.95), 4)
         numbers['heel_sts'] = numbers['sock_sts'] // 2
-        numbers['heel_rows'] = round_up(numbers['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
+        numbers['heel_rows'] = round_up(measurements['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
         numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
 
         if numbers['heel_sts'] % 3 == 2 or numbers['heel_sts'] % 3 == 1:
@@ -125,7 +132,7 @@ class Sock:
         numbers['TD2'] = round_down(((numbers['sock_sts'] - 8) / 8), 1)
         numbers['first_toe_dec_count'] = numbers['sock_sts'] - 4 * numbers['TD1']
         numbers['leg_rows'] = int(
-            numbers['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
+            measurements['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
 
         return numbers
 
