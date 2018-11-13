@@ -203,7 +203,28 @@ class Sock:
         return text
 
     def get_gusset_text(self):
-        pass
+        """
+        Return in a list the text for working the gusset.
+
+        Needs to calculate the gusset stitches per side and the number of stitches after pick up.
+        """
+        gusset_st_per_side = self.all_data['heel_rows'] // 2 + 2
+        total_sts = self.all_data['sock_sts'] + gusset_st_per_side
+
+        text = [
+            'Begin the stitch pick ups. Keep the RS facing you and pick up {} stitches along the first '
+            'side of your heel flap. Make sure to pick up the last two stitches above the break between '
+            'the heel and instep stitches.'.format(gusset_st_per_side),
+
+            'Work across the instep stitches in your desired stitch pattern.',
+
+            'Again with RS facing you, pick up and knit {} stitches on the other side of the heel flap. '
+            'Make sure you pick up the last two stitches above the break as before.'.format(gusset_st_per_side),
+
+            'You should have {} stitches on the needles.'.format(total_sts)
+        ]
+
+        return text
 
     def get_foot_text(self):
         """
