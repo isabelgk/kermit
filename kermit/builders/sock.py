@@ -50,7 +50,13 @@ class Sock:
         return text
 
     def get_cuff_text(self):
-        """ Set up the ribbing of the cuff """
+        """
+        Return the text of the cuff as a list.
+
+        There are currently two kinds of ribbing we can use on the cuff:
+            - 1x1 rib
+            - 2x2 rib
+        """
 
         if self.design['cuff_ribbing'] == 'one_by_one':
             rib = "1x1 ribbing"
@@ -67,13 +73,72 @@ class Sock:
         return text
 
     def get_leg_text(self):
-        """ Work down the leg. """
+        """
+        Return the text for working the leg in a list.
+
+        This is generic and uses "pattern stitch" to describe how to work the leg but this
+        could be updated later.
+        """
         text = ["Continue even in pattern stitch for {} rows.".format(self.all_data['leg_rows'])]
 
         return text
 
     def get_heel_flap_text(self):
-        pass
+        """
+        Return the text for making the heel flap in a list.
+
+        Three types of heel flap are currently supported:
+            - Stockinette ('stockinette')
+            - Slip stitch ('slip_stitch')
+            - Eye of Partridge ('eye_of_partridge')
+        """
+        text = []
+        text.append("Slip {} stitches onto a needle so you can work the heel flap. You "
+                    "will be working in rows for this section.".format(self.all_data['heel_sts']))
+
+        if self.design['heel_stitch_pattern'] == "stockinette":
+            lst = [
+                "    1. (RS) Knit {} stitches, ssk, turn work.".format(self.all_data['heel_sts']),
+                "    2. (WS) Slip 1 purlwise wyif, purl to end of heel stitches, turn work.",
+                "    3. (RS) Slip 1 purlwise wyib, knit to end of heel stitches, turn work.",
+                "    4. (WS) Slip 1 purlwise wyif, purl to end of heel stitches, turn work.",
+                "Repeat rows 3 and 4 until {} rows have been worked in total.".format(self.all_data['heel_rows'])
+            ]
+            text.extend(lst)
+
+        elif self.design['heel_stitch_pattern'] == "slip_stitch":
+            if self.all_data['heel_sts'] % 2 == 0:
+                text.append("    1. (RS) *Slip 1 purlwise wyib, knit 1; repeat from *.")
+            else:
+                text.append("    1. (RS) *Slip 1 purlwise wyib, knit 1; repeat from * to last stitch. Knit 1.")
+
+            text.append("    2. (WS) Slip 1 purlwise wyif, purl to end.")
+            text.append(["Repeat rows 1 and 2 until {} rows "
+                         "have been worked in total.".format(self.all_data['heel_rows'])])
+
+        elif self.design['heel_stitch_pattern'] == "eye_of_partridge":
+            if self.all_data['heel_sts'] % 2 == 0:
+                lst = [
+                    "    1. (RS) *Slip 1 purlwise wyib, knit 1; repeat from *.",
+                    "    2. (WS) Purl all stitches.",
+                    "    3. (RS) Slip 1 purlwise wyib, *slip 1 purlwise wyib, knit 1; repeat from * to last stitch."
+                    "Knit 1.",
+                    "    4. (WS) Purl all stitches."
+                ]
+            else:
+                lst = [
+                    "    1. (RS) *Slip 1 purlwise wyib, knit 1; repeat from * to last stitch. Knit 1.",
+                    "    2. (WS) Purl all stitches.",
+                    "    3. (RS) Slip 1 purlwise wyib, *slip 1 purlwise wyib, knit 1; repeat from *.",
+                    "    4. (WS) Purl all stitches."
+                ]
+            text.extend(lst)
+            text.append(["Repeat rows 1-4 until {} rows have been worked in total.".format(self.all_data['heel_rows'])])
+
+        else:
+            text.append("Something went wrong. Use your heel flap pattern here.")
+
+        return text
 
     def get_gusset_text(self):
         pass
