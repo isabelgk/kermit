@@ -113,8 +113,8 @@ class Sock:
                 text.append("    1. (RS) *Slip 1 purlwise wyib, knit 1; repeat from * to last stitch. Knit 1.")
 
             text.append("    2. (WS) Slip 1 purlwise wyif, purl to end.")
-            text.append(["Repeat rows 1 and 2 until {} rows "
-                         "have been worked in total.".format(self.all_data['heel_rows'])])
+            text.append("Repeat rows 1 and 2 until {} rows "
+                        "have been worked in total.".format(self.all_data['heel_rows']))
 
         elif self.design['heel_stitch_pattern'] == "eye_of_partridge":
             if self.all_data['heel_sts'] % 2 == 0:
@@ -206,7 +206,19 @@ class Sock:
         pass
 
     def get_foot_text(self):
-        pass
+        """
+        Return in a list the text for working the foot.
+
+        The only logic in this section is that fewer cast on stitches require starting later for toe decreases.
+        """
+        if self.all_data['sock_sts'] <= 50:
+            length = self.measurements['foot_length'] - Decimal(1.5)
+        else:
+            length = self.measurements['foot_length'] - Decimal(2)
+
+        text = ["Work even until piece is {} inches long.".format(length.quantize(Decimal('.1')))]
+
+        return text
 
     def get_toe_text(self):
         pass
