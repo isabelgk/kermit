@@ -133,10 +133,72 @@ class Sock:
                     "    4. (WS) Purl all stitches."
                 ]
             text.extend(lst)
-            text.append(["Repeat rows 1-4 until {} rows have been worked in total.".format(self.all_data['heel_rows'])])
+            text.append("Repeat rows 1-4 until {} rows have been worked in total.".format(self.all_data['heel_rows']))
 
         else:
             text.append("Something went wrong. Use your heel flap pattern here.")
+
+        return text
+
+    def get_heel_turn_text(self):
+        """
+        Return in a list the text for making the heel flap.
+
+        See here for diagrams: https://tutorials.knitpicks.com/heels-and-toes-glossary/
+        See here for general instructions: http://www.socknitters.com/Tips/heels_by_the_number.htm
+
+        There are four heel turn types supported:
+            - Dutch ('square_heel')
+            - French ('round_heel')
+            - Handkerchief ('v_heel')
+            - German Strap ('band_heel')
+        """
+        text = []
+
+        if self.design['heel_turn'] == 'square_heel':
+            set_up = self.all_data['heel_sts'] * 2 // 3
+            remaining = self.all_data['heel_sts'] - set_up
+            text.append('You are working the square heel.')
+            text.append('    1. (RS) Knit {} stitches, ssk, turn work.'.format(set_up))
+            text.append('    2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('    3. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, turn work.'.format(remaining))
+            text.append('    4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work'.format(remaining))
+            text.append('Repeat rows 3 and 4 until all heel stitches have been worked, ending after a WS row.')
+
+        elif self.design['heel_turn'] == 'round_heel':
+            set_up = round_up(self.all_data['heel_sts'] // 2, 1) + 1
+            text.append('You are working the round heel.')
+            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, knit 1, turn work.'
+                        .format(set_up)
+                        )
+            text.append('    2. (WS) Slip 1 purlwise wyif, purl 5 stitches, p2tog, purl 1, turn work.')
+            text.append('    3. (RS) Slip 1 purlwise wyib, knit 6 stitches, ssk, knit 1, turn work.')
+            text.append('    4. (WS) Slip 1 purlwise wyif, purl 7 stitches, p2tog, purl 1, turn work.')
+            text.append('Continue working one more stitch until all have been worked.')
+
+        elif self.design['heel_turn'] == 'v_heel':
+            set_up = self.all_data['heel_sts'] // 2 - 1
+            text.append('You are working the V-heel.')
+            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches - 1, ssk, knit 1, turn work.'
+                        .format(set_up)
+                        )
+            text.append('    2. (WS) Slip 1 purlwise wyif, purl 1 stitch, p2tog, purl 1, turn work.')
+            text.append('    3. (RS) Slip 1 purlwise wyib, knit 2 stitches, ssk, knit 1, turn work.')
+            text.append('    4. (WS) Slip 1 purlwise wyif, purl 3 stitches, p2tog, purl 1, turn work.')
+            text.append('Continue working one more stitch until all have been worked.')
+
+        elif self.design['heel_turn'] == 'band_heel':
+            set_up = self.all_data['heel_sts'] * 3 // 4
+            remaining = self.all_data['heel_sts'] // 2
+            text.append('You are working the band heel.')
+            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(set_up))
+            text.append('    2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('    3. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(remaining))
+            text.append('    4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('Continue working the last two rows until all stitches have been worked.')
+
+        else:
+            text.append("Something went wrong. Use your heel turn pattern here.")
 
         return text
 
@@ -154,6 +216,7 @@ class Sock:
                 'cuff': self.get_cuff_text(),
                 'leg': self.get_leg_text(),
                 'heel_flap': self.get_heel_flap_text(),
+                'heel_turn': self.get_heel_turn_text(),
                 'gusset': self.get_gusset_text(),
                 'foot': self.get_foot_text(),
                 'toe': self.get_toe_text()}
@@ -259,6 +322,7 @@ class Sock:
         numbers['heel_rows'] = round_up(measurements['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
         numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
 
+        # This section will be deprecated and moved to the get_heel_turn_text.
         if numbers['heel_sts'] % 3 == 2 or numbers['heel_sts'] % 3 == 1:
             numbers['HT1'] = (numbers['heel_sts'] // 3) * 2 + 1
         else:

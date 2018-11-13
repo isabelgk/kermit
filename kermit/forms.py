@@ -41,7 +41,7 @@ class SockMeasurements(FlaskForm):
 
 class SockDesignChoices(FlaskForm):
     construction = SelectField('Construction style',
-                                 choices=[('top_down', 'Top-down (start from cuff)')])
+                               choices=[('top_down', 'Top-down (start from cuff)')])
     ease = DecimalField('Ease', default=Decimal(0.9), validators=[Optional()])
     cuff_ribbing = SelectField('Cuff ribbing',
                                choices=[('one_by_one', '1x1 rib'), ('two_by_two', '2x2 rib')]
@@ -50,6 +50,11 @@ class SockDesignChoices(FlaskForm):
                                       choices=[('stockinette', 'Stockinette'), ('slip_stitch', 'Slip-stitch'),
                                                ('eye_of_partridge', 'Eye of Partridge')]
                                       )
+    heel_turn = SelectField('Heel construction',
+                            choices=[('square_heel', 'Square (Dutch) Heel'), ('round_heel', 'Round (French) Heel'),
+                                     ('v_heel', 'V-Heel (Handkerchief Heel)'),
+                                     ('band_heel', 'Band (German Strap) Heel')]
+                            )
     toe_shaping = SelectField('Toe shaping',
                               choices=[('half_and_half', 'Half and half'), ('simple', 'Simple'),
                                        ('barn', 'Barn')]
