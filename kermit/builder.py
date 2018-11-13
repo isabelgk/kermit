@@ -1,85 +1,133 @@
-import math
-from decimal import Decimal
+from kermit.utilities import *
 
 
-# UTILITIES
+class Sock:
+    """ A sock pattern object """
 
-def near_round(x, base):
-    """ Returns n rounded to the nearest multiple of m """
-    return int(base * round(Decimal(x)/base))
+    def __init__(self, gauge, measurements):
+        """ Constructor for the Sock """
+        self.gauge = self.fill_in_needed_values(gauge, gauge=True)
+        self.measurements = self.fill_in_needed_values(measurements, measurements=True)
+        self.flags = self.unusual_ratios(self.measurements)
 
+    @staticmethod
+    def fill_in_needed_values(d, gauge=False, measurements=False):
+        """
+        To generate a pattern, there are only a few needed inputs because the
+        others can be calculated. We allow more inputs than needed, though,
+        because getting values relies less on the average sizing and helps create
+        a better fit in the final product.
 
-def round_up(x, base):
-    """ Returns n rounded up to the nearest multiple of m """
-    return int(math.ceil(x / base) * base)
+        This function gathers all known numbers and calculates the necessary remaining
+        values.
 
+        Args:
+            - gauge (dict): A dict holding form values from the user under "Gauge"
+                - Must contain spi
+                - Can contain row gauge
+            - measurements (dict): A dict holding form values from the user under "Measurements"
+                - Must contain one of [foot circumference, ankle circumference, gusset
+                circumference, foot length]
+                - Can contain lower calf circumference, heel diagonal circumference, and
+                sock leg length
 
-def round_down(x, base):
-    """ Returns n rounded down to the nearest multiple of m """
-    return int(math.floor(x / base) * base)
+        Returns:
+            - Dictionary with all strings for keys and numbers as values.
+        """
+        assert not (gauge and measurements), "You can only fill in one dictionary at a time"
 
+        if gauge:
+            # Go through gauge first: row gauge to stitches per inch is roughly 4 to 3
+            if 'row_gauge' not in gauge:
+                d['row_gauge'] = Decimal(4/3 * d['spi'])
 
-def make_str_dict(keys_list, original):
-    result = dict()
-    for key in keys_list:
-        result[key] = str(original[key])
-    return result
+        if measurements:
+            if 'foot_length' in d:
+                if 'foot_circ' not in measurements:
+                    d['foot_circ'] = d['foot_length'] * Decimal(1.05)
+                if 'ankle_circ' not in d:
+                    d['ankle_circ'] = d['foot_length'] * Decimal(1.05)
+                if 'gusset_circ' not in d:
+                    d['gusset_circ'] = d['foot_length'] * Decimal(1.15)
 
+            if 'foot_circ' in d:
+                if 'foot_length' not in d:
+                    d['foot_length'] = d['foot_circ'] * Decimal(0.95)
+                if 'gusset_circ' not in d:
+                    d['gusset_circ'] = d['foot_circ'] * Decimal(1.10)
+                if 'ankle_circ' not in d:
+                    d['ankle_circ'] = d['foot_circ']
 
-def decrease_instructions(sts_in_decrease_group, closure_initial_decrease):
-    s = ''
-    if closure_initial_decrease != 0:
-        s += '*Initial decrease round*: [k' + str(sts_in_decrease_group - 1) + ', k2tog]'\
-                + str(closure_initial_decrease)  + ' times. Knit to end of the round.\n\n'
-    s += 'Divide the stitches into ' + str(sts_in_decrease_group) + ' groups.\n\n'
-    s += '*Decrease round*: [knit to 2 sts before end of group, k2tog] 5 times around. '
-    s += 'Repeat until 5 sts remain.\n\n'
-    return s
+            if 'gusset_circ' in d:
+                if 'foot_length' not in d:
+                    d['foot_length'] = d['gusset_circ'] * Decimal(0.95)
+                if 'foot_circ' not in d:
+                    d['foot_circ'] = d['gusset_circ'] / Decimal(1.10)
+                if 'ankle_circ' not in d:
+                    d['ankle_circ'] = d['gusset_circ'] * Decimal(1.05)
 
-# CALCULATIONS
+            if 'ankle_circ' in measurements:
+                if 'foot_length' not in d:
+                    d['foot_length'] = d['ankle_circ'] * Decimal(0.95)
+                if 'foot_circ' not in d:
+                    d['foot_circ'] = d['ankle_circ']
+                if 'gusset_circ' not in d:
+                    d['gusset_circ'] = d['ankle_circ'] * Decimal(1.10)
 
+        return d
 
-def sock_calculate(parameters, inputs):
-    """ Given all of the form inputs, make the calculations needed. """
+    @staticmethod
+    def unusual_ratios(measurements):
+        """
+        From the measurements, there may be some unusual ratios that will require
+        extra changes to the pattern.
 
-    calc = inputs.copy()
-    calc['spi'] = parameters['spi']
-    if not parameters['row_gauge']:
-        calc['row_gauge'] = Decimal(calc['spi']) * Decimal(4/3)
-    else:
-        calc['row_gauge'] = parameters['row_gauge']
+        Args:
+            - Measurements (dict)
 
-    calc['sock_sts'] = near_round(parameters['spi'] * inputs['foot_circ'] * Decimal(.95), 4)
-    calc['heel_sts'] = calc['sock_sts'] // 2
-    calc['heel_rows'] = round_up(Decimal(calc['foot_circ']) * parameters['row_gauge'] * Decimal(0.3), 2)
-    calc['gusset_st_per_side'] = int((calc['heel_rows'] / 2) + 2)
+        Returns:
+            - list of unusual ratios to set as a flag on the object
+        """
+        flags = []
 
-    if calc['heel_sts'] % 3 == 2 or calc['heel_sts'] % 3 == 1:
-        calc['HT1'] = (calc['heel_sts'] // 3) * 2 + 1
-    else:
-        calc['HT1'] = calc['heel_sts'] * 2 // 3
-    if calc['heel_sts'] % 3 == 2:
-        calc['HT2'] = calc['heel_sts'] // 3
-    elif calc['heel_sts'] % 3 == 1:
-        calc['HT2'] = int(math.floor(calc['heel_sts']) / 3 + 1)
-    else:
-        calc['HT2'] = int(calc['heel_sts'] / 3)
+        return flags
 
-    calc['sts_after_pickup'] = int(
-        (calc['sock_sts'] / 2) + (calc['HT2'] + 2) + (2 * calc['gusset_st_per_side']))
-    calc['TD1'] = round_up(((calc['sock_sts'] - 8) / 8), 1)
-    calc['TD2'] = round_down(((calc['sock_sts'] - 8) / 8), 1)
-    calc['first_toe_dec_count'] = calc['sock_sts'] - 4 * calc['TD1']
-    calc['leg_rows'] = int(
-        calc['leg_length'] * parameters['row_gauge'] - 20 - calc['heel_rows'])
+    @staticmethod
+    def calculate_values(gauge, measurements):
+        """
+        Given your gauge and foot measurements, get all of the needed numbers for the sock pattern.
 
-    keys_list = ['spi', 'row_gauge', 'foot_circ', 'ankle_circ', 'gusset_circ',
-                 'foot_length', 'low_calf_circ', 'heel_diag', 'leg_length', 'sock_sts',
-                 'heel_sts', 'heel_rows', 'gusset_st_per_side', 'HT1', 'HT2',
-                 'sts_after_pickup', 'leg_rows', 'first_toe_dec_count', 'TD1', 'TD2']
-    result = make_str_dict(keys_list, calc)
+        Args:
+            - gauge (dict): Stitches per inch and rounds per inch
+            - measurements (dict): foot circumference, ankle circumference, gusset circumference, foot length,
+            lower calf circumference, heel diagonal circumference, sock leg length
+        """
+        numbers = dict()
+        numbers['sock_sts'] = near_round(gauge['spi'] * measurements['foot_circ'] * Decimal(.95), 4)
+        numbers['heel_sts'] = numbers['sock_sts'] // 2
+        numbers['heel_rows'] = round_up(numbers['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
+        numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
 
-    return result
+        if numbers['heel_sts'] % 3 == 2 or numbers['heel_sts'] % 3 == 1:
+            numbers['HT1'] = (numbers['heel_sts'] // 3) * 2 + 1
+        else:
+            numbers['HT1'] = numbers['heel_sts'] * 2 // 3
+        if numbers['heel_sts'] % 3 == 2:
+            numbers['HT2'] = numbers['heel_sts'] // 3
+        elif numbers['heel_sts'] % 3 == 1:
+            numbers['HT2'] = int(math.floor(numbers['heel_sts']) / 3 + 1)
+        else:
+            numbers['HT2'] = int(numbers['heel_sts'] / 3)
+
+        numbers['sts_after_pickup'] = int(
+            (numbers['sock_sts'] / 2) + (numbers['HT2'] + 2) + (2 * numbers['gusset_st_per_side']))
+        numbers['TD1'] = round_up(((numbers['sock_sts'] - 8) / 8), 1)
+        numbers['TD2'] = round_down(((numbers['sock_sts'] - 8) / 8), 1)
+        numbers['first_toe_dec_count'] = numbers['sock_sts'] - 4 * numbers['TD1']
+        numbers['leg_rows'] = int(
+            numbers['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
+
+        return numbers
 
 
 def mitten_calculate(inputs):
@@ -119,3 +167,8 @@ def mitten_calculate(inputs):
                  'decrease_instructions', 'thumb_length', 'thumb_rows']
     result = make_str_dict(keys_list, calc)
     return result
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
