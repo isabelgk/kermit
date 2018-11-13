@@ -1,45 +1,85 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Design a sock</h1>
+<h1>Build a sock pattern</h1>
+
 <form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <p>
-        {{ form.spi.label }}<br>
-        {{ form.spi(size=32) }}
-    </p>
-    <p>
-        {{ form.row_gauge.label }}<br>
-        {{ form.row_gauge(size=32) }}
-    </p>
-    <p>
-        {{ form.foot_circ.label }}<br>
-        {{ form.foot_circ(size=32) }}
-    </p>
-    <p>
-        {{ form.ankle_circ.label }}<br>
-        {{ form.ankle_circ(size=32) }}
-    </p>
-    <p>
-        {{ form.gusset_circ.label }}<br>
-        {{ form.gusset_circ(size=32) }}
-    </p>
-    <p>
-        {{ form.foot_length.label }}<br>
-        {{ form.foot_length(size=32) }}
-    </p>
-    <p>
-        {{ form.low_calf_circ.label }}<br>
-        {{ form.low_calf_circ(size=32) }}
-    </p>
-    <p>
-        {{ form.heel_diag.label }}<br>
-        {{ form.heel_diag(size=32) }}
-    </p>
-    <p>
-        {{ form.leg_length.label }}<br>
-        {{ form.leg_length(size=32) }}
-    </p>
-    <p>{{ form.submit() }}</p>
+    {{ metadata.hidden_tag() }}
+
+    <h2>Metadata</h2>
+        <p>
+            {{ metadata.name.label }}<br>
+            {{ metadata.name(size=32) }}
+        </p>
+
+    <h2>Design Choices</h2>
+        <p>
+            {{ design.ease.label }}<br>
+            {{ design.ease(size=2) }}
+        </p>
+        <p>
+            {{ design.construction.label }}<br>
+            {{ design.construction() }}
+        </p>
+        <p>
+            {{ design.cuff_ribbing.label }}<br>
+            {{ design.cuff_ribbing() }}
+        </p>
+        <p>
+            {{ design.heel_stitch_pattern.label }}<br>
+            {{ design.heel_stitch_pattern() }}
+        </p>
+        <p>
+            {{ design.heel_turn.label }}<br>
+            {{ design.heel_turn() }}
+        </p>
+        <p>
+            {{ design.toe_shaping.label }} <br>
+            {{ design.toe_shaping() }}
+        </p>
+
+    <h2>Gauge</h2>
+        <p>
+            {{ gauge.spi.label }}<br>
+            {{ gauge.spi(size=2) }}
+        </p>
+        <p>
+            {{ gauge.row_gauge.label }}<br>
+            {{ gauge.row_gauge(size=2) }}
+        </p>
+
+    <h2>Measurements</h2>
+        <!--<img src="{{ url_for('static', filename='foot-diagram.png') }}">-->
+        <p>
+            {{ measurements.foot_circ.label }}<br>
+            {{ measurements.foot_circ(size=2) }}
+        </p>
+        <p>
+            {{ measurements.ankle_circ.label }}<br>
+            {{ measurements.ankle_circ(size=2) }}
+        </p>
+        <p>
+            {{ measurements.gusset_circ.label }}<br>
+            {{ measurements.gusset_circ(size=2) }}
+        </p>
+        <p>
+            {{ measurements.foot_length.label }}<br>
+            {{ measurements.foot_length(size=2) }}
+        </p>
+        <p>
+            {{ measurements.low_calf_circ.label }}<br>
+            {{ measurements.low_calf_circ(size=2) }}
+        </p>
+        <p>
+            {{ measurements.heel_diag.label }}<br>
+            {{ measurements.heel_diag(size=2) }}
+        </p>
+        <p>
+            {{ measurements.leg_length.label }}<br>
+            {{ measurements.leg_length(size=2) }}
+        </p>
+        <p>{{ measurements.submit() }}</p>
+
 </form>
+
 {% endblock %}

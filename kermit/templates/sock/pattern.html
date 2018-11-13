@@ -1,55 +1,53 @@
 {% extends "base.html" %}
+
 {% block content %}
+
 <h1>Custom Top-Down Socks</h1>
-<p>
-    stitches per inch: {{ c.spi }}<br>
-    row gauge: {{ c.row_gauge }}
-</p>
+
+{% for para in d.intro %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="cuff">Cuff</h2>
-<p>Cast on {{ c.sock_sts }} stitches. Join in the round. Work in k1, p1 ribbing for 2&quot;.</p>
+
+{% for para in d.cuff %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="leg">Leg</h2>
-<p>Continue even in pattern stitch for {{ c.leg_rows }} rows, to reach {{ c.leg_length }} inches.</p>
+
+{% for para in d.leg %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="heel-flap">Heel Flap</h2>
-<p>Slip {{ c.heel_sts }} stitches onto one needle to work for the heel. The remaining stitches will be worked later for the instep. Work back and forth in rows as follows.</p>
-<ul>
-    <li><strong>Heel flap row 1</strong>: (RS) Knit {{ c.heel_sts }}, turn work.</li>
-    <li><strong>Heel flap row 2</strong>: (WS) Slip 1 purlwise wyib, purl to end of heel stitches, turn work.</li>
-    <li><strong>Heel flap row 3</strong>: (RS) Slip 1 knitwise wyib, knit to end of heel stitches, turn work.</li>
-    <li><strong>Heel flap row 4</strong>: (WS) Slip 1 purlwise wyif, purl to end of heel stitches, turn work.</li>
-</ul>
-<p>Repeat <strong>heel flap rows</strong> 3 and 4 until {{ c.heel_rows }} rows have been worked.</p>
+
+{% for para in d.heel_flap %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="heel-turn">Heel Turn</h2>
-<ul>
-    <li><strong>Heel turn row 1</strong>: (RS) Knit {{ c.HT1 }}, ssk, turn work.</li>
-    <li><strong>Heel turn row 2</strong>: (WS) Slip 1 purlwise wyif, purl {{ c.HT2 }}, p2tog, turn work.</li>
-    <li><strong>Heel turn row 3</strong>: (RS) Slip 1 purlwise wyib, knit {{ c.HT2 }}, ssk, turn work.</li>
-    <li><strong>Heel turn row 4</strong>: (WS) Slip 1 purlwise wyif, purl {{ c.HT2 }}, p2tog, turn work.</li>
-</ul>
-<p>Repeat <strong>heel turn rows</strong> 3 and 4 until all heel stitches have been worked, ending having worked a wrong-side row. [ {{ c.HT2 }} + 2 stitches remain]</p>
-<p>With RS facing, knit remaining heel stitches.</p>
-<h2 id="gusset-decreases">Gusset decreases</h2>
-<h3 id="gusset-pick-up-round">Gusset pick-up round</h3>
-<p>With RS facing and working under both legs of each slipped selvedge stitch, pick up and knit {{ c.gusset_st_per_side }} along the first side of the heel flap, picking up the last 2 stitches above the break between the heel and instep stitches.</p>
-<p>Work across the instep stitches (maintaining stitch pattern).</p>
-<p>With RS still facing, pick up and knit {{ c.gusset_st_per_side }} along the other side of the heel flap, picking up the first 2 stitches above the break between the heel and instep stitches as before, then use the same needle to knit half of the remaining heel stitches again.</p>
-<p>The rounds now begin in the center of the heel stitches.</p>
-<ul>
-    <li><em>Gusset round 1</em>: Knit to the end of the heel stitches, knit all picked-up stitches through the back loop to twist them, work across instep stitches in pattern as desired, knit all picked-up stitches through the back loop, knit to end of round.</li>
-    <li><em>Gusset round 2</em>: (Decrease round) Knit to 3 stitches before start of instep, k2tog, k1; work across instep stitches; k1, ssk, knit to end of round--2 gusset stitches decreased.</li>
-    <li><em>Gusset round 3</em>: Knit.</li>
-</ul>
-<p>Repeat gusset rounds 2 and 3 until {{ c.sock_sts }} remain.</p>
+
+{% for para in d.heel_turn %}
+<p>{{para}}</p>
+{% endfor %}
+
+<h2 id="gusset">Gusset</h2>
+
+{% for para in d.gusset %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="foot">Foot</h2>
-<p>The foot length depends on the number of stitches initially cast on.</p>
-<p>If you began with 50 or fewer cast-on stitches, work even (maintaining stitch pattern on instep if desired) until piece measures 1.5&quot; less than the desired finished sock foot length.</p>
-<p>Otherwise, work even (maintaining stitch pattern on instep if desired) until the piece measures 2&quot; less than the desired finished sock foot length.</p>
+
+{% for para in d.foot %}
+<p>{{para}}</p>
+{% endfor %}
+
 <h2 id="toe">Toe</h2>
-<ul>
-    <li><em>Toe round 1</em>: (decrease round) Knit to 3 stitches before instep, k2tog, k2, ssk, knit to 3 stitches before end of instep, k2tog, k2, ssk, knit to end of round--4 sts decreased.</li>
-    <li><em>Toe round 2</em>: Knit even.</li>
-</ul>
-<p>Repeat these 2 rounds {{ c.TD1 }} times.</p>
-<p>Repeat toe round 1 every round (i.e., decrease every round) {{ c.HT2 }} times.</p>
-<h2 id="finishing">Finishing</h2>
-<p>Cut yarn, leaving an 8&quot; tail. Thread tail on a tapestry needle, draw through remaining stitches, pull tight to close hole, and secure to wrong side. Weave in loose ends, and block as desired.</p>
+
+{% for para in d.toe %}
+<p>{{para}}</p>
+{% endfor %}
+
 {% endblock %}
