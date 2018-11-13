@@ -56,8 +56,7 @@ class SockDesignChoices(FlaskForm):
                                      ('band_heel', 'Band (German Strap) Heel')]
                             )
     toe_shaping = SelectField('Toe shaping',
-                              choices=[('half_and_half', 'Half and half'), ('simple', 'Simple'),
-                                       ('barn', 'Barn')]
+                              choices=[('half_and_half', 'Half and half'), ('simple', 'Simple')]
                              )
     submit = SubmitField('Next')
 

@@ -242,7 +242,51 @@ class Sock:
         return text
 
     def get_toe_text(self):
-        pass
+        """
+        Return in a list the text for working the toe.
+
+        There are two toe types supported:
+            - half-and-half ("half_and_half")
+            - simple ("simple")
+        """
+
+        text = []
+        decrease_text = "* Decrease round: Knit to 3 stitches before instep, k2tog, knit 2, ssk, knit to " \
+                        "3 stitches before end of instep, k2tog, knit 2, ssk, knit to end of round.  " \
+                        "(4 stitches decreased)"
+        plain_text = "* Knit even round: Knit all stitches."
+
+        if self.design['toe_shaping'] == 'half_and_half':
+            sts_to_decrease = round_up(self.all_data['sock_sts'] - round_down(self.gauge['spi'], 2), 4)
+            remaining_sts = self.all_data['sock_sts'] - sts_to_decrease
+            decrease_rounds = sts_to_decrease // 4
+            spaced_decrease_rounds = round_up(decrease_rounds / 2, 1)
+            continuing_decrease_rounds = decrease_rounds - spaced_decrease_rounds
+            text.append(decrease_text)
+            text.append(plain_text)
+            text.append("Complete a decrease round and a knit even round grouping {} times (total: {} rounds)".
+                        format(decrease_rounds, decrease_rounds*2))
+            text.append("Complete a decrease round {} times (total: {} rounds)".format(continuing_decrease_rounds,
+                                                                                       continuing_decrease_rounds))
+            text.append("You should have {} stitches remaining. Cut the yarn, leaving a tail,"
+                        "and use a tapestry needle to pull yarn through the remaining stitches. Weave in ends and "
+                        "block as desired.".format(remaining_sts))
+
+        elif self.design['toe_shaping'] == 'simple':
+            sts_to_decrease = round_down(self.all_data['sock_sts'] // 3, 4)
+            remaining_sts = self.all_data['sock_sts'] - sts_to_decrease
+            decrease_rounds = sts_to_decrease // 4
+            text.append(decrease_text)
+            text.append(plain_text)
+            text.append("Complete a decrease round and a knit even round grouping {} times (total: {} rounds)".
+                        format(decrease_rounds, decrease_rounds * 2))
+            text.append("You should have {} stitches remaining. Cut your yarn and graft the toe with Kitchener"
+                        "stitch. Block as desired.".format(remaining_sts))
+
+        else:
+            text.append("Something went wrong. Your toe decrease text goes here.")
+
+        return text
 
     def get_pattern_text_dict(self):
         return {'intro': self.get_intro_text(),
