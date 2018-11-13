@@ -1,5 +1,7 @@
+import math
+
 from decimal import Decimal
-from kermit.utilities import round_down, round_up, near_round, stringify_dict
+from kermit.utilities import round_down, round_up, near_round
 
 
 class Sock:
@@ -14,7 +16,6 @@ class Sock:
         self.design = design
 
         self.pattern = self.get_pattern_text_dict()
-        print(self.pattern)
 
     def __str__(self):
         """ The sock's string is its pattern. """
@@ -24,9 +25,6 @@ class Sock:
             for item in value:
                 text += "{}\n".format(item)
         return text
-
-    def get_calculated_sock_numbers(self):
-        return stringify_dict(self.calculate_values(self.gauge, self.measurements))
 
     def get_intro_text(self):
         """
@@ -159,42 +157,38 @@ class Sock:
             set_up = self.all_data['heel_sts'] * 2 // 3
             remaining = self.all_data['heel_sts'] - set_up
             text.append('You are working the square heel.')
-            text.append('    1. (RS) Knit {} stitches, ssk, turn work.'.format(set_up))
-            text.append('    2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
-            text.append('    3. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, turn work.'.format(remaining))
-            text.append('    4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work'.format(remaining))
+            text.append('1. (RS) Knit {} stitches, ssk, turn work.'.format(set_up))
+            text.append('2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('3. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, turn work.'.format(remaining))
+            text.append('4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work'.format(remaining))
             text.append('Repeat rows 3 and 4 until all heel stitches have been worked, ending after a WS row.')
 
         elif self.design['heel_turn'] == 'round_heel':
             set_up = round_up(self.all_data['heel_sts'] // 2, 1) + 1
             text.append('You are working the round heel.')
-            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, knit 1, turn work.'
-                        .format(set_up)
-                        )
-            text.append('    2. (WS) Slip 1 purlwise wyif, purl 5 stitches, p2tog, purl 1, turn work.')
-            text.append('    3. (RS) Slip 1 purlwise wyib, knit 6 stitches, ssk, knit 1, turn work.')
-            text.append('    4. (WS) Slip 1 purlwise wyif, purl 7 stitches, p2tog, purl 1, turn work.')
+            text.append('1. (RS) Slip 1 purlwise wyib, knit {} stitches, ssk, knit 1, turn work.'.format(set_up))
+            text.append('2. (WS) Slip 1 purlwise wyif, purl 5 stitches, p2tog, purl 1, turn work.')
+            text.append('3. (RS) Slip 1 purlwise wyib, knit 6 stitches, ssk, knit 1, turn work.')
+            text.append('4. (WS) Slip 1 purlwise wyif, purl 7 stitches, p2tog, purl 1, turn work.')
             text.append('Continue working one more stitch until all have been worked.')
 
         elif self.design['heel_turn'] == 'v_heel':
             set_up = self.all_data['heel_sts'] // 2 - 1
             text.append('You are working the V-heel.')
-            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches - 1, ssk, knit 1, turn work.'
-                        .format(set_up)
-                        )
-            text.append('    2. (WS) Slip 1 purlwise wyif, purl 1 stitch, p2tog, purl 1, turn work.')
-            text.append('    3. (RS) Slip 1 purlwise wyib, knit 2 stitches, ssk, knit 1, turn work.')
-            text.append('    4. (WS) Slip 1 purlwise wyif, purl 3 stitches, p2tog, purl 1, turn work.')
+            text.append('1. (RS) Slip 1 purlwise wyib, knit {} stitches - 1, ssk, knit 1, turn work.'.format(set_up))
+            text.append('2. (WS) Slip 1 purlwise wyif, purl 1 stitch, p2tog, purl 1, turn work.')
+            text.append('3. (RS) Slip 1 purlwise wyib, knit 2 stitches, ssk, knit 1, turn work.')
+            text.append('4. (WS) Slip 1 purlwise wyif, purl 3 stitches, p2tog, purl 1, turn work.')
             text.append('Continue working one more stitch until all have been worked.')
 
         elif self.design['heel_turn'] == 'band_heel':
             set_up = self.all_data['heel_sts'] * 3 // 4
             remaining = self.all_data['heel_sts'] // 2
             text.append('You are working the band heel.')
-            text.append('    1. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(set_up))
-            text.append('    2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
-            text.append('    3. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(remaining))
-            text.append('    4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('1. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(set_up))
+            text.append('2. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
+            text.append('3. (RS) Slip 1 purlwise wyib, knit {} stitches, k2tog, turn work.'.format(remaining))
+            text.append('4. (WS) Slip 1 purlwise wyif, purl {} stitches, p2tog, turn work.'.format(remaining))
             text.append('Continue working the last two rows until all stitches have been worked.')
 
         else:
@@ -209,7 +203,7 @@ class Sock:
         Needs to calculate the gusset stitches per side and the number of stitches after pick up.
         """
         gusset_st_per_side = self.all_data['heel_rows'] // 2 + 2
-        total_sts = self.all_data['sock_sts'] + gusset_st_per_side
+        total_sts = self.all_data['sock_sts'] + gusset_st_per_side *2
 
         text = [
             'Begin the stitch pick ups. Keep the RS facing you and pick up {} stitches along the first '
@@ -221,7 +215,18 @@ class Sock:
             'Again with RS facing you, pick up and knit {} stitches on the other side of the heel flap. '
             'Make sure you pick up the last two stitches above the break as before.'.format(gusset_st_per_side),
 
-            'You should have {} stitches on the needles.'.format(total_sts)
+            'You should have {} stitches on the needles. The rounds now begin in the center '
+            'of the heel stitches.'.format(total_sts),
+
+            '1. Knit to the end of the heel stitches, knit all picked up stitches through the back loop to twist them'
+            ' and continue until the end of round.',
+
+            '2. (Decrease round) Knit to 3 stitches before start of instep, k2tog, knit 1; '
+            'work across instep stitches; knit 1, ssk, knit to end of round. (2 stitches decreased)',
+
+            '3. Knit even.',
+
+            'Repeat rounds 2 and 3 until {} stitches remain.'.format(self.all_data['sock_sts'])
         ]
 
         return text
@@ -268,7 +273,7 @@ class Sock:
                         format(decrease_rounds, decrease_rounds*2))
             text.append("Complete a decrease round {} times (total: {} rounds)".format(continuing_decrease_rounds,
                                                                                        continuing_decrease_rounds))
-            text.append("You should have {} stitches remaining. Cut the yarn, leaving a tail,"
+            text.append("You should have {} stitches remaining. Cut the yarn to leave a tail "
                         "and use a tapestry needle to pull yarn through the remaining stitches. Weave in ends and "
                         "block as desired.".format(remaining_sts))
 
@@ -280,7 +285,7 @@ class Sock:
             text.append(plain_text)
             text.append("Complete a decrease round and a knit even round grouping {} times (total: {} rounds)".
                         format(decrease_rounds, decrease_rounds * 2))
-            text.append("You should have {} stitches remaining. Cut your yarn and graft the toe with Kitchener"
+            text.append("You should have {} stitches remaining. Cut your yarn and graft the toe with Kitchener "
                         "stitch. Block as desired.".format(remaining_sts))
 
         else:
@@ -367,23 +372,6 @@ class Sock:
         return d
 
     @staticmethod
-    def unusual_ratios(measurements):
-        # TODO: Unusual ratio determination
-        """
-        From the measurements, there may be some unusual ratios that will require
-        extra changes to the pattern.
-
-        Args:
-            - Measurements (dict)
-
-        Returns:
-            - list of unusual ratios to set as a flag on the object
-        """
-        flags = []
-
-        return flags
-
-    @staticmethod
     def calculate_values(gauge, measurements):
         """
         Given your gauge and foot measurements, get all of the needed numbers for the builders pattern.
@@ -398,24 +386,6 @@ class Sock:
         numbers['heel_sts'] = numbers['sock_sts'] // 2
         numbers['heel_rows'] = round_up(measurements['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
         numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
-
-        # This section will be deprecated and moved to the get_heel_turn_text.
-        if numbers['heel_sts'] % 3 == 2 or numbers['heel_sts'] % 3 == 1:
-            numbers['HT1'] = (numbers['heel_sts'] // 3) * 2 + 1
-        else:
-            numbers['HT1'] = numbers['heel_sts'] * 2 // 3
-        if numbers['heel_sts'] % 3 == 2:
-            numbers['HT2'] = numbers['heel_sts'] // 3
-        elif numbers['heel_sts'] % 3 == 1:
-            numbers['HT2'] = int(math.floor(numbers['heel_sts']) / 3 + 1)
-        else:
-            numbers['HT2'] = int(numbers['heel_sts'] / 3)
-
-        numbers['sts_after_pickup'] = int(
-            (numbers['sock_sts'] / 2) + (numbers['HT2'] + 2) + (2 * numbers['gusset_st_per_side']))
-        numbers['TD1'] = round_up(((numbers['sock_sts'] - 8) / 8), 1)
-        numbers['TD2'] = round_down(((numbers['sock_sts'] - 8) / 8), 1)
-        numbers['first_toe_dec_count'] = numbers['sock_sts'] - 4 * numbers['TD1']
         numbers['leg_rows'] = int(
             measurements['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
 

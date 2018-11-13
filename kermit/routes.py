@@ -38,7 +38,7 @@ def input_sock_measurements():
     metadata = Metadata()
     if measurements.validate_on_submit():
         sock = Sock(metadata.data, gauge.data, measurements.data, design.data)
-        return render_template('sock/pattern.html', title="Sock pattern", fillin=sock.get_calculated_sock_numbers())
+        return render_template('sock/pattern.html', title="Sock pattern", d=sock.get_pattern_text_dict())
     return render_template('sock/measurements.html', title="Sock measurements",
                            gauge=gauge, measurements=measurements, design=design,
                            metadata=metadata
