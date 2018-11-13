@@ -12,7 +12,6 @@ class Sock:
         self.measurements = self.fill_in_needed_values(measurements, measurements=True)
         self.all_data = self.calculate_values(self.gauge, self.measurements)
         self.design = design
-        print(design)
 
         self.pattern = self.get_pattern_text_dict()
         print(self.pattern)
@@ -68,7 +67,10 @@ class Sock:
         return text
 
     def get_leg_text(self):
-        pass
+        """ Work down the leg. """
+        text = ["Continue even in pattern stitch for {} rows.".format(self.all_data['leg_rows'])]
+
+        return text
 
     def get_heel_flap_text(self):
         pass
