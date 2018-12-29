@@ -4,6 +4,7 @@
 <h1>New Project</h1>
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
+    <p>{{ form.name() }}</p>
     <p>{{ form.submit() }}</p>
 </form>
 {% endblock %}

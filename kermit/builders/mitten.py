@@ -1,5 +1,3 @@
-# TODO: Refactor this
-
 def mitten_calculate(inputs):
     calc = inputs.copy()
 

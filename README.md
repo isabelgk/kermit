@@ -29,7 +29,6 @@ making multiple gauge swatches, or doing tedious calculations, I wanted there to
     - [ ] Beret
     - [ ] Ear flaps
     - [ ] Stocking cap
-- [ ] Cowls
 - [ ] Sweaters
     - [ ] Drop-shoulder
     - [ ] Raglan

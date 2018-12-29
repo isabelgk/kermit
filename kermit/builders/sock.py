@@ -1,6 +1,5 @@
-import math
-
 from decimal import Decimal
+
 from kermit.utilities import round_down, round_up, near_round
 
 

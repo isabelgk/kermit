@@ -2,11 +2,10 @@
 
 import math
 import os
-
-
 from string import Template
-from weasyprint import HTML
+
 from markdown2 import markdown_path
+from weasyprint import HTML
 
 
 # UTILITIES
@@ -15,9 +14,11 @@ def near_round(x, base):
     """ Returns n rounded to the nearest multiple of m """
     return int(base * round(float(x)/base))
 
+
 def round_up(x, base):
     """ Returns n rounded up to the nearest multiple of m """
     return int(math.ceil(x / base) * base)
+
 
 def round_down(x, base):
     """ Returns n rounded down to the nearest multiple of m """
@@ -29,6 +30,7 @@ def save_to_file(pattern_text, filename):
     BASE_DIR = os.path.abspath(os.path.dirname(__file__))
     with open(BASE_DIR + '/created_patterns/'+ filename + '.md', 'w') as f:
         f.write(pattern_text)
+
 
 def make_pdf(filename):
     """ Given a markdown file, convert to a PDF. """
