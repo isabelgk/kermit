@@ -1,5 +1,3 @@
-from decimal import Decimal
-
 from flask_wtf import FlaskForm
 from wtforms import FloatField, SelectField, StringField, SubmitField
 from wtforms.validators import DataRequired, Optional
@@ -18,8 +16,8 @@ class PickProject(FlaskForm):
 
 
 class KnittingParameters(FlaskForm):
-    spi = FloatField('Stitches per inch', default=Decimal(8.0), validators=[DataRequired()])
-    row_gauge = FloatField('Rounds per inch (row gauge)', default=Decimal(11), validators=[Optional()])
+    spi = FloatField('Stitches per inch', default=8, validators=[DataRequired()])
+    row_gauge = FloatField('Rounds per inch (row gauge)', default=11, validators=[Optional()])
     submit = SubmitField('Next')
 
 
