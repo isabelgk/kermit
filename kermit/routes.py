@@ -62,7 +62,7 @@ def input_mitten_design():
     session['mitten_design'] = dict()
     if form.validate_on_submit():
         return redirect(url_for('input_knitting_parameters'))
-    return 'Mitten design is not implemented yet.'  # TODO
+    return 'Mitten design is selection is under development. Try making socks instead.'  # TODO
 
 
 @app.route('/knitting-parameters', methods=['GET', 'POST'])
@@ -103,7 +103,7 @@ def choose_standard_sock_measurements():
     session['sock_measurements'] = form.data
     if form.validate_on_submit():
         return redirect(url_for('sock_pattern'))
-    return 'Standard sock measurement selection is not implemented yet.'  # TODO
+    return 'Standard sock measurement selection is under development. Try using custom.'  # TODO
 
 
 @app.route('/mitten/standard-measurements', methods=['GET', 'POST'])
@@ -112,7 +112,7 @@ def choose_standard_mitten_measurements():
     session['mitten_measurements'] = form.data
     if form.validate_on_submit():
         return "redirect(url_for('mitten_pattern'))"  # TODO
-    return 'Standard mitten measurement selection is not implemented yet.'  # TODO
+    return 'Standard mitten measurement selection is under development. Try using custom.'  # TODO
 
 
 @app.route('/sock/custom-measurements', methods=['GET', 'POST'])
