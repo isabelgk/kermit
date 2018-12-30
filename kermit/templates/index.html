@@ -1,11 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>New Project</h1>
-<form action="" method="post" novalidate>
-    {{ form.hidden_tag() }}
-    <p>{{ form.name() }}</p>
-    <p>{{ form.submit() }}</p>
-</form>
+
+<h2>New Project</h2>
+
+    <form action="" method="post" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p>{{ form.name() }}</p>
+        <p>{{ form.submit() }}</p>
+
+    </form>
+
 {% endblock %}
 

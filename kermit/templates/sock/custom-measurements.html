@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Build a sock pattern</h1>
+<h2>Measurements</h2>
 
-<form action="" method="post" novalidate>
+    <img src="{{ url_for('static', filename='sock/foot-diagram.png') }}" height="350">
 
-    <h2>Measurements</h2>
-        <!--<img src="{{ url_for('static', filename='foot-diagram.png') }}">-->
+    <form action="" method="post" novalidate>
+
         <p>
             {{ form.foot_circ.label }}<br>
             {{ form.foot_circ(size=2) }}
@@ -37,6 +37,7 @@
         </p>
         <p>{{ form.submit() }}</p>
 
-</form>
+    </form>
+
 
 {% endblock %}

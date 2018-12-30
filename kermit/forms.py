@@ -18,14 +18,15 @@ class PickProject(FlaskForm):
 class KnittingParameters(FlaskForm):
     spi = FloatField('Stitches per inch', default=8, validators=[DataRequired()])
     row_gauge = FloatField('Rounds per inch (row gauge)', default=11, validators=[Optional()])
+    yarn = StringField('Yarn', validators=[Optional()])
+    needles = StringField('Needles', validators=[Optional()])
     submit = SubmitField('Next')
 
 
-class Metadata(FlaskForm):
-    name = StringField('Name', validators=[Optional()])
-    yarn = StringField('Yarn', validators=[Optional()])
-    needles = StringField('Needles', validators=[Optional()])
-    submit = SubmitField('Next', validators=[Optional()])
+class MeasurementType(FlaskForm):
+    measurement_type = SelectField('Measurement input',
+                                   choices=[('standard', 'Standard'), ('custom', 'Custom')])
+    submit = SubmitField('Next')
 
 
 class StandardSockMeasurements(FlaskForm):
@@ -75,12 +76,10 @@ class MittenDesignChoices(FlaskForm):
     pass
 
 
-class MittenMeasurements(FlaskForm):
+class CustomMittenMeasurements(FlaskForm):
     palm_circumference = FloatField('Palm (hand) circumference (in.)')
     submit = SubmitField('Next')
 
 
-class MeasurementType(FlaskForm):
-    measurement_type = SelectField('Measurement input',
-                                   choices=[('Standard', 'Standard'), ('Custom', 'Custom')])
+class StandardMittenMeasurements(FlaskForm):
     submit = SubmitField('Next')
