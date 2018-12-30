@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Optional
 
 
 class KermitProject(FlaskForm):
-    name = StringField('Your name', validators=[Optional()])
+    name = StringField('Your name', default="Your name", validators=[Optional()])
     submit = SubmitField('Submit')
 
 

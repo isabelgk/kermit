@@ -113,10 +113,17 @@ def choose_standard_mitten_measurements():
 @app.route('/sock/custom-measurements', methods=['GET', 'POST'])
 def input_custom_sock_measurements():
     form = CustomSockMeasurements()
-    session['sock_measurements'] = form.data
     if form.validate_on_submit():
+        session['sock_measurements'] = {'foot_circ': form.foot_circ.data,
+                                        'ankle_circ': form.ankle_circ.data,
+                                        'gusset_circ': form.gusset_circ.data,
+                                        'foot_length': form.foot_length.data,
+                                        'low_calf_circ': form.low_calf_circ.data,
+                                        'heel_diag': form.heel_diag.data,
+                                        'leg_length': form.leg_length.data,
+                                        }
         return redirect(url_for('sock_pattern'))
-    return 'Custom sock measurement selection is not implemented yet.'  # TODO
+    return render_template('sock/custom-measurements.html', title="")  # TODO
 
 
 @app.route('/mitten/custom-measurements', methods=['GET', 'POST'])
