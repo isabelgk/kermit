@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post" novalidate>
+
+    {{ form.hidden_tag() }}
+
+    <h2>Design Choices</h2>
+        <p>
+            {{ form.ease.label }}<br>
+            {{ form.ease(size=2) }}
+        </p>
+
+</form>
+
+{% endblock %}

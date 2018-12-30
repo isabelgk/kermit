@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form action="" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <h2>Design Choices</h2>
+        <p>
+            {{ form.ease.label }}<br>
+            {{ form.ease(size=2) }}
+        </p>
+        <p>
+            {{ form.construction.label }}<br>
+            {{ form.construction() }}
+        </p>
+        <p>
+            {{ form.cuff_ribbing.label }}<br>
+            {{ form.cuff_ribbing() }}
+        </p>
+        <p>
+            {{ form.heel_stitch_pattern.label }}<br>
+            {{ form.heel_stitch_pattern() }}
+        </p>
+        <p>
+            {{ form.heel_turn.label }}<br>
+            {{ form.heel_turn() }}
+        </p>
+        <p>
+            {{ form.toe_shaping.label }} <br>
+            {{ form.toe_shaping() }}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+</form>
+
+{% endblock %}

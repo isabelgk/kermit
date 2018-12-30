@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+
+    {{ form.hidden_tag() }}
+
+    <h2>Gauge</h2>
+        <p>
+            {{ form.spi.label }}<br>
+            {{ form.spi(size=2) }}
+        </p>
+        <p>
+            {{ form.row_gauge.label }}<br>
+            {{ form.row_gauge(size=2) }}
+        </p>
+        <p>
+            {{ form.submit() }}
+        </p>
+</form>
+
+{% endblock %}
