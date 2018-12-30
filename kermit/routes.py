@@ -1,3 +1,14 @@
+# A Flask session holds:
+#    name
+#    project_type (i.e. 'sock', 'mitten')
+#    design (dict containing relevant design choices as strings)
+#    measurement_type (i.e. 'custom')
+#    measurements (dict containing relevant measurements as floats)
+#
+# After the session has been filled with necessary information, routes.py sends the data to the right builder class
+# which then returns the pattern section text that is rendered in the pattern html.
+
+
 from flask import render_template, redirect, session, url_for
 
 from kermit import app
@@ -20,46 +31,54 @@ def index():
 def choose_project_type():
     form = PickProject()
     session['project_type'] = form.project_type.data
-    if form.project_type.data == "sock":
+    if form.project_type.data == 'sock':
         return redirect(url_for('input_sock_design'))
-    if form.project_type.data == "Mitten":
+    if form.project_type.data == 'mitten':
         return redirect(url_for('input_mitten_design'))
-    return render_template('pattern-type.html', title="Pattern Selection", form=form)
+    return render_template('pattern-type.html', title='Pattern Selection', form=form)
 
 
 @app.route('/sock/design', methods=['GET', 'POST'])
 def input_sock_design():
     form = SockDesignChoices()
-    session['design'] = form.data
     if form.validate_on_submit():
+        session['sock_design'] = {'construction': form.construction.data,
+                                  'ease': form.ease.data,
+                                  'cuff_ribbing': form.cuff_ribbing.data,
+                                  'heel_stitch_pattern': form.heel_stitch_pattern.data,
+                                  'heel_turn': form.heel_turn.data,
+                                  'toe_shaping': form.toe_shaping.data,
+                                  }
         return redirect(url_for('input_knitting_parameters'))
-    return 'sock design placeholder'
+    return render_template('sock/design.html', title='Sock Design', form=form)
 
 
 @app.route('/mitten/design', methods=['GET', 'POST'])
 def input_mitten_design():
     form = MittenDesignChoices()
-    session['design'] = form.data
     if form.validate_on_submit():
+        session['mitten_design'] = dict()
         return redirect(url_for('input_knitting_parameters'))
-    return 'mitten design placeholder'
+    return 'Mitten design is not implemented yet.'  # TODO
 
 
 @app.route('/knitting-parameters', methods=['GET', 'POST'])
 def input_knitting_parameters():
     form = KnittingParameters()
-    session['knitting_parameters'] = form.data
     if form.validate_on_submit():
+        session['knitting_parameters'] = {'spi': form.spi.data,
+                                          'row_gauge': form.row_gauge.data,
+                                          }
         return redirect(url_for('input_measurement_type'))
-    return 'knitting parameters placeholder'
+    return render_template('knitting-parameters.html', title='Knitting Parameters', form=form)
 
 
 @app.route('/measurement-type', methods=['GET', 'POST'])
 def input_measurement_type():
     form = MeasurementType()
     project_type = session.get('project_type')
-    session['measurement_type'] = form.measurement_type.data
     if form.validate_on_submit():
+        session['measurement_type'] = form.measurement_type.data
         if session.get('measurement_type') == 'standard':
             if project_type == 'sock':
                 return redirect(url_for('choose_standard_sock_measurements'))
@@ -70,7 +89,7 @@ def input_measurement_type():
                 return redirect(url_for('input_custom_sock_measurements'))
             elif project_type == 'mitten':
                 return redirect(url_for('input_custom_mitten_measurements'))
-    return 'measurement type placeholder'
+    return 'Measurement type is not implemented yet.'  # TODO
 
 
 @app.route('/sock/standard-measurements', methods=['GET', 'POST'])
@@ -79,7 +98,7 @@ def choose_standard_sock_measurements():
     session['sock_measurements'] = form.data
     if form.validate_on_submit():
         return redirect(url_for('sock_pattern'))
-    return 'standard sock measurements placeholder'
+    return 'Standard sock measurement selection is not implemented yet.'  # TODO
 
 
 @app.route('/mitten/standard-measurements', methods=['GET', 'POST'])
@@ -88,7 +107,7 @@ def choose_standard_mitten_measurements():
     session['mitten_measurements'] = form.data
     if form.validate_on_submit():
         return redirect(url_for('mitten_pattern'))
-    return 'standard mitten measurements placeholder'
+    return 'Standard mitten measurement selection is not implemented yet.'  # TODO
 
 
 @app.route('/sock/custom-measurements', methods=['GET', 'POST'])
@@ -97,7 +116,7 @@ def input_custom_sock_measurements():
     session['sock_measurements'] = form.data
     if form.validate_on_submit():
         return redirect(url_for('sock_pattern'))
-    return 'custom sock measurements placeholder'
+    return 'Custom sock measurement selection is not implemented yet.'  # TODO
 
 
 @app.route('/mitten/custom-measurements', methods=['GET', 'POST'])
@@ -106,7 +125,7 @@ def input_custom_mitten_measurements():
     session['mitten_measurements'] = form.data
     if form.validate_on_submit():
         return redirect(url_for('mitten_pattern'))
-    return 'custom mitten measurements placeholder'
+    return 'Custom mitten measurement selection is not implemented yet.'  # TODO
 
 
 @app.route('/sock/pattern')

@@ -1,3 +1,7 @@
+class Mitten():
+    pass
+
+
 def mitten_calculate(inputs):
     calc = inputs.copy()
 
