@@ -11,6 +11,7 @@ from kermit.forms import *
 def index():
     form = KermitProject()
     if form.validate_on_submit():
+        session['name'] = form.name.data
         return redirect(url_for('choose_project_type'))
     return render_template('index.html', title="Home", form=form)
 
@@ -19,7 +20,7 @@ def index():
 def choose_project_type():
     form = PickProject()
     session['project_type'] = form.project_type.data
-    if form.project_type.data == "Sock":
+    if form.project_type.data == "sock":
         return redirect(url_for('input_sock_design'))
     if form.project_type.data == "Mitten":
         return redirect(url_for('input_mitten_design'))
@@ -60,14 +61,14 @@ def input_measurement_type():
     session['measurement_type'] = form.measurement_type.data
     if form.validate_on_submit():
         if session.get('measurement_type') == 'standard':
-            if project_type == 'Sock':
+            if project_type == 'sock':
                 return redirect(url_for('choose_standard_sock_measurements'))
-            elif project_type == 'Mitten':
+            elif project_type == 'mitten':
                 return redirect(url_for('choose_standard_mitten_measurements'))
         else:  # custom measurements
-            if project_type == 'Sock':
+            if project_type == 'sock':
                 return redirect(url_for('input_custom_sock_measurements'))
-            elif project_type == 'Mitten':
+            elif project_type == 'mitten':
                 return redirect(url_for('input_custom_mitten_measurements'))
     return 'measurement type placeholder'
 

@@ -10,7 +10,7 @@ class KermitProject(FlaskForm):
 
 class PickProject(FlaskForm):
     project_type = SelectField('Project types',
-                               choices=[('Sock', 'Sock'), ('Mitten', 'Mitten')]
+                               choices=[('sock', 'Sock'), ('mitten', 'Mitten')]
                                )
     submit = SubmitField('Next')
 
