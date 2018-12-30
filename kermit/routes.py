@@ -2,6 +2,7 @@
 #    name
 #    project_type (i.e. 'sock', 'mitten')
 #    design (dict containing relevant design choices as strings)
+#    knitting parameters (i.e. spi)
 #    measurement_type (i.e. 'custom')
 #    measurements (dict containing relevant measurements as floats)
 #
@@ -126,7 +127,8 @@ def input_custom_sock_measurements():
                                         'heel_diag': form.heel_diag.data,
                                         'leg_length': form.leg_length.data,
                                         }
-        return redirect(url_for('sock_pattern'))
+        sock = Sock(session)
+        return render_template('sock/pattern.html', title="Sock pattern", d=sock.get_pattern_text_dict())
     return render_template('sock/custom-measurements.html', title="Custom Sock Measurements", form=form)
 
 
@@ -141,9 +143,9 @@ def input_custom_mitten_measurements():
 
 @app.route('/sock/pattern')
 def sock_pattern():  # TODO
-
-    sock = Sock(metadata.data, gauge.data, measurements.data, design.data)
-    return render_template('sock/pattern.html', title="Sock pattern", d=sock.get_pattern_text_dict())
+    sock = Sock(session)
+    if form.validate_on_submit():
+        return render_template('sock/pattern.html', title="Sock pattern", d=sock.get_pattern_text_dict())
 
 
 @app.route('/mitten/pattern')

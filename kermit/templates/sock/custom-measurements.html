@@ -7,6 +7,8 @@
 
     <form action="" method="post" novalidate>
 
+        {{ form.hidden_tag() }}
+
         <p>
             {{ form.foot_circ.label }}<br>
             {{ form.foot_circ(size=2) }}

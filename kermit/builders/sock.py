@@ -1,4 +1,10 @@
-from decimal import Decimal
+# A Flask session holds:
+#    name
+#    project_type (i.e. 'sock', 'mitten')
+#    design (dict containing relevant design choices as strings)
+#    knitting parameters (i.e. spi)
+#    measurement_type (i.e. 'custom')
+#    measurements (dict containing relevant measurements as floats)
 
 from kermit.utilities import round_down, round_up, near_round
 
@@ -6,14 +12,14 @@ from kermit.utilities import round_down, round_up, near_round
 class Sock:
     """ A builders pattern object """
 
-    def __init__(self, metadata, gauge, measurements, design):
+    def __init__(self, session):
         """ Constructor for the Sock """
-        self.metadata = metadata
-        self.gauge = self.fill_in_needed_values(gauge, gauge=True)
-        self.measurements = self.fill_in_needed_values(measurements, measurements=True)
-        self.all_data = self.calculate_values(self.gauge, self.measurements)
-        self.design = design
+        self.name = session.get('name')
+        self.design = session.get('sock_design')
+        self.gauge = self.fill_in_needed_values(session.get('knitting_parameters'), gauge=True)
+        self.measurements = self.fill_in_needed_values(session.get('sock_measurements'), measurements=True)
 
+        self.all_data = self.calculate_values(self.gauge, self.measurements)
         self.pattern = self.get_pattern_text_dict()
 
     def __str__(self):
@@ -39,8 +45,8 @@ class Sock:
         https://stackoverflow.com/questions/12244057/any-way-to-add-a-new-line-from-a-string-with-the-n-character-in-flask
         """
         text = []
-        if self.metadata['name'] is not None:
-            text.append("{}".format(self.metadata['name']))
+        if self.name is not None:
+            text.append("{}".format(self.name))
         text.append("stitches per inch: {}".format(self.gauge['spi']))
         text.append("rounds per inch: {}".format(self.gauge['row_gauge']))
 
@@ -237,11 +243,11 @@ class Sock:
         The only logic in this section is that fewer cast on stitches require starting later for toe decreases.
         """
         if self.all_data['sock_sts'] <= 50:
-            length = self.measurements['foot_length'] - Decimal(1.5)
+            length = self.measurements['foot_length'] - 1.5
         else:
-            length = self.measurements['foot_length'] - Decimal(2)
+            length = self.measurements['foot_length'] - 2
 
-        text = ["Work even until piece is {} inches long.".format(length.quantize(Decimal('.1')))]
+        text = ["Work even until piece is {} inches long.".format(length)]
 
         return text
 
@@ -300,7 +306,8 @@ class Sock:
                 'heel_turn': self.get_heel_turn_text(),
                 'gusset': self.get_gusset_text(),
                 'foot': self.get_foot_text(),
-                'toe': self.get_toe_text()}
+                'toe': self.get_toe_text(),
+                }
 
     @staticmethod
     def fill_in_needed_values(d, gauge=False, measurements=False):
@@ -330,43 +337,43 @@ class Sock:
 
         if gauge:
             if 'row_gauge' not in d:
-                d['row_gauge'] = Decimal(4/3 * d['spi'])
+                d['row_gauge'] = 4/3 * d['spi']
 
         if measurements:
             if d['foot_length'] is not None:
                 if d['foot_circ'] is None:
-                    d['foot_circ'] = d['foot_length'] * Decimal(1.05)
+                    d['foot_circ'] = d['foot_length'] * 1.05
                 if d['ankle_circ'] is None:
-                    d['ankle_circ'] = d['foot_length'] * Decimal(1.05)
+                    d['ankle_circ'] = d['foot_length'] * 1.05
                 if d['gusset_circ'] is None:
-                    d['gusset_circ'] = d['foot_length'] * Decimal(1.15)
+                    d['gusset_circ'] = d['foot_length'] * 1.15
 
             if d['foot_circ'] is not None:
                 if d['foot_length'] is None:
-                    d['foot_length'] = d['foot_circ'] * Decimal(0.95)
+                    d['foot_length'] = d['foot_circ'] * 0.95
                 if d['gusset_circ'] is None:
-                    d['gusset_circ'] = d['foot_circ'] * Decimal(1.10)
+                    d['gusset_circ'] = d['foot_circ'] * 1.10
                 if d['ankle_circ'] is None:
                     d['ankle_circ'] = d['foot_circ']
 
             if d['gusset_circ'] is not None:
                 if d['foot_length'] is None:
-                    d['foot_length'] = d['gusset_circ'] * Decimal(0.95)
+                    d['foot_length'] = d['gusset_circ'] * 0.95
                 if d['foot_circ'] is None:
-                    d['foot_circ'] = d['gusset_circ'] / Decimal(1.10)
+                    d['foot_circ'] = d['gusset_circ'] / 1.10
                 if d['ankle_circ'] is None:
-                    d['ankle_circ'] = d['gusset_circ'] * Decimal(1.05)
+                    d['ankle_circ'] = d['gusset_circ'] * 1.05
 
             if d['ankle_circ'] is not None:
                 if d['foot_length'] is None:
-                    d['foot_length'] = d['ankle_circ'] * Decimal(0.95)
+                    d['foot_length'] = d['ankle_circ'] * 0.95
                 if d['foot_circ'] is None:
                     d['foot_circ'] = d['ankle_circ']
                 if d['gusset_circ'] is None:
-                    d['gusset_circ'] = d['ankle_circ'] * Decimal(1.10)
+                    d['gusset_circ'] = d['ankle_circ'] * 1.10
 
             if d['leg_length'] is None:
-                d['leg_length'] = Decimal(8.00)
+                d['leg_length'] = 8.00
 
         return d
 
@@ -381,9 +388,9 @@ class Sock:
             lower calf circumference, heel diagonal circumference, builders leg length
         """
         numbers = dict()
-        numbers['sock_sts'] = near_round(gauge['spi'] * measurements['foot_circ'] * Decimal(.95), 4)
+        numbers['sock_sts'] = near_round(gauge['spi'] * measurements['foot_circ'] * .95, 4)
         numbers['heel_sts'] = numbers['sock_sts'] // 2
-        numbers['heel_rows'] = round_up(measurements['foot_circ'] * gauge['row_gauge'] * Decimal(0.3), 2)
+        numbers['heel_rows'] = round_up(measurements['foot_circ'] * gauge['row_gauge'] * 0.3, 2)
         numbers['gusset_st_per_side'] = int((numbers['heel_rows'] / 2) + 2)
         numbers['leg_rows'] = int(
             measurements['leg_length'] * gauge['row_gauge'] - 20 - numbers['heel_rows'])
