@@ -30,6 +30,13 @@ class MeasurementType(FlaskForm):
 
 
 class StandardSockMeasurements(FlaskForm):
+    foot_sizing_standard = SelectField('Foot sizing standard',
+                                       choices=[('us', 'US/Canadian'), ('eu', 'EU'), ('uk', 'UK')]
+                                       )
+    style = SelectField('Style',
+                         choices=[('men', "Men's"), ('women', "Women's"), ('child', "Child's"), ('kid', "Kid's")]
+                        )
+    size = FloatField('Size', default=8.5)
     submit = SubmitField('Next')
 
 

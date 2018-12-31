@@ -15,6 +15,7 @@ from flask import render_template, redirect, session, url_for
 from kermit import app
 from kermit.builders.mitten import Mitten
 from kermit.builders.sock import Sock
+from kermit.builders.standard_sock_sizer import sock_sizer
 from kermit.forms import KermitProject, PickProject, SockDesignChoices, KnittingParameters, MeasurementType, \
     CustomSockMeasurements, StandardSockMeasurements, StandardMittenMeasurements, CustomMittenMeasurements, \
     MittenDesignChoices
@@ -100,10 +101,14 @@ def input_measurement_type():
 @app.route('/sock/standard-measurements', methods=['GET', 'POST'])
 def choose_standard_sock_measurements():
     form = StandardSockMeasurements()
-    session['sock_measurements'] = form.data
     if form.validate_on_submit():
-        return redirect(url_for('sock_pattern'))
-    return 'Standard sock measurement selection is under development. Try using custom.'  # TODO
+        session['sock_measurements'] = sock_sizer({'foot_sizing_standard': form.foot_sizing_standard.data,
+                                                   'style': form.style.data,
+                                                   'size': form.size.data,
+                                                   })
+        sock = Sock(session)
+        return render_template('sock/pattern.html', title="Sock pattern", d=sock.get_pattern_text_dict())
+    return render_template('sock/standard-measurements.html', title='Standard Sock Sizes', form=form)
 
 
 @app.route('/mitten/standard-measurements', methods=['GET', 'POST'])

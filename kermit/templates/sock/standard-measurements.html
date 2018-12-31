@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Standard Sizes</h2>
+
+    <form action="" method="post" novalidate>
+
+        {{ form.hidden_tag() }}
+
+        <p>
+            {{ form.foot_sizing_standard() }}
+        </p>
+
+        <p>
+            {{ form.style() }}
+        </p>
+
+        <p>
+            {{ form.size.label }}<br>
+            {{ form.size() }}
+        </p>
+
+        <p>{{ form.submit() }}</p>
+
+    </form>
+
+
+{% endblock %}
