@@ -1,21 +1,26 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
 
-<h2>Pattern Type</h2>
+<h2>What would you like to make?</h2>
 
-    <form action="" method="post" novalidate>
+    <div class="row">
+        
+        <div class="col-sm-4">
+            <h3>Socks</h3>
+            <a href="/sock/design" class="thumbnail">
+                <img src="{{ url_for('static', filename='sock/noun_socks_1464270.png') }}" alt="socks by AliWijaya from the Noun Project">
+            </a>
 
-        {{ form.hidden_tag() }}
+        </div>
 
-        <p>
-            {{ form.project_type() }}
-        </p>
-
-        <p>
-            {{ form.submit() }}
-        </p>
-
-    </form>
+        <div class="col-sm-4">
+            <h3>Mittens</h3>
+            <a href="/mitten/design" class="thumbnail">
+                <img src="{{ url_for('static', filename='mitten/noun_Mittens_264668.png') }}" alt="By Xinh Studio from the Noun Project">
+            </a>
+        </div>
+        
+    </div>
 
 {% endblock %}

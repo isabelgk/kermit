@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
 
 <h2>New Project</h2>
 
@@ -8,7 +8,10 @@
 
         {{ form.hidden_tag() }}
 
-        <p>{{ form.name() }}</p>
+        <p>
+            {{ form.name.label }}<br>
+            {{ form.name() }}
+        </p>
         <p>{{ form.submit() }}</p>
 
     </form>

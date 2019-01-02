@@ -1,45 +1,59 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
 <h2>Measurements</h2>
 
-    <img src="{{ url_for('static', filename='sock/foot-diagram.png') }}" height="350">
 
-    <form action="" method="post" novalidate>
+    <div class="row">
 
-        {{ form.hidden_tag() }}
+        <div class="col-sm-4">
+            <p> Input as much information as you have. However, only one of foot circumference, ankle circumference,
+                gusset circumference, and foot length is required.
+            </p>
+            <form action="" method="post" novalidate>
+                {{ form.hidden_tag() }}
 
-        <p>
-            {{ form.foot_circ.label }}<br>
-            {{ form.foot_circ(size=2) }}
-        </p>
-        <p>
-            {{ form.ankle_circ.label }}<br>
-            {{ form.ankle_circ(size=2) }}
-        </p>
-        <p>
-            {{ form.gusset_circ.label }}<br>
-            {{ form.gusset_circ(size=2) }}
-        </p>
-        <p>
-            {{ form.foot_length.label }}<br>
-            {{ form.foot_length(size=2) }}
-        </p>
-        <p>
-            {{ form.low_calf_circ.label }}<br>
-            {{ form.low_calf_circ(size=2) }}
-        </p>
-        <p>
-            {{ form.heel_diag.label }}<br>
-            {{ form.heel_diag(size=2) }}
-        </p>
-        <p>
-            {{ form.leg_length.label }}<br>
-            {{ form.leg_length(size=2) }}
-        </p>
-        <p>{{ form.submit() }}</p>
+                <p>
+                    {{ form.foot_circ.label }}<br>
+                    {{ form.foot_circ(size=6) }}
+                </p>
+                <p>
+                    {{ form.ankle_circ.label }}<br>
+                    {{ form.ankle_circ(size=6) }}
+                </p>
+                <p>
+                    {{ form.gusset_circ.label }}<br>
+                    {{ form.gusset_circ(size=6) }}
+                </p>
+                <p>
+                    {{ form.foot_length.label }}<br>
+                    {{ form.foot_length(size=6) }}
+                </p>
+                <p>
+                    {{ form.low_calf_circ.label }}<br>
+                    {{ form.low_calf_circ(size=6) }}
+                </p>
+                <p>
+                    {{ form.heel_diag.label }}<br>
+                    {{ form.heel_diag(size=6) }}
+                </p>
+                <p>
+                    {{ form.leg_length.label }}<br>
+                    {{ form.leg_length(size=6) }}
+                </p>
+                <p>{{ form.submit() }}</p>
 
-    </form>
+            </form>
+        </div>
+
+        <div class="col-sm-8">
+            <img src="{{ url_for('static', filename='sock/foot-diagram.png') }}" height="450">
+        </div>
+    </div>
+
+
+
+
 
 
 {% endblock %}

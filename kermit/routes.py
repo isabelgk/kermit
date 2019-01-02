@@ -16,7 +16,7 @@ from kermit import app
 from kermit.builders.mitten import Mitten
 from kermit.builders.sock import Sock
 from kermit.builders.standard_sock_sizer import sock_sizer
-from kermit.forms import KermitProject, PickProject, SockDesignChoices, KnittingParameters, MeasurementType, \
+from kermit.forms import KermitProject, SockDesignChoices, KnittingParameters, MeasurementType, \
     CustomSockMeasurements, StandardSockMeasurements, StandardMittenMeasurements, CustomMittenMeasurements, \
     MittenDesignChoices
 
@@ -33,17 +33,12 @@ def index():
 
 @app.route('/project-type', methods=['GET', 'POST'])
 def choose_project_type():
-    form = PickProject()
-    session['project_type'] = form.project_type.data
-    if form.project_type.data == 'sock':
-        return redirect(url_for('input_sock_design'))
-    if form.project_type.data == 'mitten':
-        return redirect(url_for('input_mitten_design'))
-    return render_template('pattern-type.html', title='Pattern Selection', form=form)
+    return render_template('pattern-type.html', title='Pattern Selection')
 
 
 @app.route('/sock/design', methods=['GET', 'POST'])
 def input_sock_design():
+    session['project_type'] = 'sock'
     form = SockDesignChoices()
     session['sock_design'] = {'construction': form.construction.data,
                               'ease': form.ease.data,
@@ -59,6 +54,7 @@ def input_sock_design():
 
 @app.route('/mitten/design', methods=['GET', 'POST'])
 def input_mitten_design():
+    session['project_type'] = 'mitten'
     form = MittenDesignChoices()
     session['mitten_design'] = dict()
     if form.validate_on_submit():

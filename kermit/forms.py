@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Optional
 
 
 class KermitProject(FlaskForm):
-    name = StringField('Your name', default="Your name", validators=[Optional()])
+    name = StringField('Your name (optional)', validators=[Optional()])
     submit = SubmitField('Submit')
 
 
@@ -41,7 +41,7 @@ class StandardSockMeasurements(FlaskForm):
 
 
 class CustomSockMeasurements(FlaskForm):
-    foot_circ = FloatField('Foot circumference (in.)', default=9.25, validators=[Optional()])
+    foot_circ = FloatField('Foot circumference (in.)', validators=[Optional()])
     ankle_circ = FloatField('Ankle circumference (in.)', validators=[Optional()])
     gusset_circ = FloatField('Gusset circumference (in.)', validators=[Optional()])
     foot_length = FloatField('Foot length (in.)', validators=[Optional()])
@@ -49,6 +49,19 @@ class CustomSockMeasurements(FlaskForm):
     heel_diag = FloatField('Heel diagonal circumference (in.)', validators=[Optional()])
     leg_length = FloatField('Sock leg length (in.)', validators=[Optional()])
     submit = SubmitField('Next')
+
+    def validate(self):
+        # https://stackoverflow.com/questions/29703979/flask-conditional-validation-on-multiple-form-fields
+        if not super(CustomSockMeasurements, self).validate():
+            return False
+        if not self.foot_circ.data and not self.ankle_circ.data and not self.gusset_circ.data and not self.foot_length.data:
+            msg = 'You must provide at least one of these values.'
+            self.foot_circ.errors.append(msg)
+            self.ankle_circ.errors.append(msg)
+            self.gusset_circ.errors.append(msg)
+            self.foot_length.errors.append(msg)
+            return False
+        return True
 
 
 class SockDesignChoices(FlaskForm):

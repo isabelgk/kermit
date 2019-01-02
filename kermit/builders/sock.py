@@ -45,10 +45,14 @@ class Sock:
         https://stackoverflow.com/questions/12244057/any-way-to-add-a-new-line-from-a-string-with-the-n-character-in-flask
         """
         text = []
-        if self.name is not None:
-            text.append("{}".format(self.name))
-        text.append("stitches per inch: {}".format(self.gauge['spi']))
-        text.append("rounds per inch: {}".format(self.gauge['row_gauge']))
+        if self.name is not "":
+            text.append("Pattern for {}".format(self.name))
+        if self.gauge['yarn'] is not "":
+            text.append("Yarn: {}".format(self.gauge['yarn']))
+        if self.gauge['needles'] is not "":
+            text.append("Needles: {}".format(self.gauge['needles']))
+        text.append("Stitches per inch: {}".format(self.gauge['spi']))
+        text.append("Rounds per inch: {}".format(self.gauge['row_gauge']))
 
         return text
 

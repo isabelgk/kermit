@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block app_content %}
 
 <h2>Gauge</h2>
 
@@ -10,12 +10,22 @@
 
             <p>
                 {{ form.spi.label }}<br>
-                {{ form.spi(size=2) }}
+                {{ form.spi(size=6) }}
             </p>
 
             <p>
                 {{ form.row_gauge.label }}<br>
-                {{ form.row_gauge(size=2) }}
+                {{ form.row_gauge(size=6) }}
+            </p>
+
+            <p>
+                {{ form.yarn.label }}<br>
+                {{ form.yarn(size=18) }}
+            </p>
+
+            <p>
+                {{ form.needles.label }} <br>
+                {{ form.needles(size=18) }}
             </p>
 
             <p>
